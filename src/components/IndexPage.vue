@@ -1,85 +1,157 @@
 <template>
-    <div class="wrapper">
-        <div class="wrapper-header">
-            <div class="wrapper-header-logo"></div>
+    <div class="layout">
+        <div class="layout-header">
+            <div class="layout-header-logo"></div>
         </div>
-        <div style="position:relative;">
-            <div class="wrapper-center">
-                <div class="wrapper-center-header">
-                    <ul class="menu">
-                        <li class="active">首页</li>
-                        <li>资产管理</li>
-                        <li>数据可视化</li>
-                        <li>诊断</li>
-                        <li>统计分析</li>
-                    </ul>
-                    <div class="datetime">{{dateTime}}</div>
-                </div>
-                <div class="wrapper-center-content">
-                    <div class="wrapper-center-content-circlebg-left"></div>
-                    <div class="wrapper-center-content-circlebg-right"></div>
-                </div>
-                <div class="wrapper-center-footer">
-                    <ul class="menu-details">
-                        <li>
-                            <b>正</b>
-                            <span>中山北路路口节点01asdasdasdasdasdasdsadasdsadaas</span>
-                        </li>
-                        <li>
-                            <b>正</b>
-                            <span>中山北路路口节点01</span>
-                        </li>
-                        <li>
-                            <b>正</b>
-                            <span>中山北路路口节点01</span>
-                        </li>
-                        <li>
-                            <span>中山北路路口节点01</span>
-                        </li>
-                        <li>
-                            <span>中山北路路口节点01</span>
-                        </li>
-                    </ul>
-                    <ul class="menu">
-                        <li class="active">
-                            <span>潘黄镇</span>
-                        </li>
-                        <li>
-                            <span>潘黄镇</span>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <div class="wrapper-left">
-                <div class="wrapper-left-video">
-                    <div class="logo">
-                        <span>视频通道</span>
-                    </div>
+        <div class="layout-content">
+            <div class="layout-content-left">
+                <div class="layout-content-left-header">
+                    <div class="title">视频通道</div>
                     <div class="video-wrapper">
-                        <div class="video">
-
-                        </div>
+                        <div class="video"></div>
                         <div class="info">
-                            <div class="left">
-                                <div class="video-info">潘黄镇</div>
+                            <div class="info-left">
+                                <div class="info-left-title">潘黄镇</div>
                             </div>
-                            <div class="right">
-                                <div class="video-info-item">
+                            <div class="info-right">
+                                <div class="info-right-item">
                                     设备厂家：海康
                                 </div>
-                                <div class="video-info-item">
+                                <div class="info-right-item">
                                     生命周期：3年
                                 </div>
-                                <div class="video-info-item">
+                                <div class="info-right-item">
                                     品牌型号：N-60
                                 </div>
-                                <div class="video-info-item">
+                                <div class="info-right-item">
                                     建设单位：中威
                                 </div>
                             </div>
                         </div>
                     </div>
-
+                </div>
+                <div class="layout-content-left-content">
+                    <div class="layout-content-left-content-item">
+                        <div class="title">网络设备</div>
+                        <div class="info-table">
+                            <div class="tr header">
+                                <div class="th">设备</div>
+                                <div class="th">正常</div>
+                                <div class="th">故障</div>
+                            </div>
+                            <div class="tr">
+                                <div class="td">摄像机</div>
+                                <div class="td success">2344</div>
+                                <div class="td error">43</div>
+                            </div>
+                            <div class="tr">
+                                <div class="td">供电</div>
+                                <div class="td success">45</div>
+                                <div class="td error">543</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layout-content-left-content-item">
+                        <div class="title">运维节点</div>
+                        <div class="item-left">
+                            <div class="info">
+                                <div class="total">1430</div>
+                                <div>总节点(个)</div>
+                            </div>
+                        </div>
+                        <div class="item-right">
+                            <div class="info">
+                                <div class="total">33</div>
+                                <div>运行节点(个)</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="layout-content-left-footer">
+                    <div class="item-wrapper">
+                        <div>在线率</div>
+                    </div>
+                    <div class="item-wrapper">
+                        <div>离线率</div>
+                    </div>
+                </div>
+            </div>
+            <div class="layout-content-center">
+                <div class="layout-content-center-header">
+                    <div class="datetime">{{dateTime}}</div>
+                </div>
+                <div class="layout-content-center-content">
+                    <div class="circle-left"></div>
+                    <div class="circle-right"></div>
+                </div>
+                <div class="layout-content-center-footer"></div>
+            </div>
+            <div class="layout-content-right">
+                <div class="layout-content-right-item">
+                    <div class="title">故障原因</div>
+                    <div class="item-wrapper">
+                        <div class="header">
+                            <div class="img"></div>
+                            <div class="info">
+                                <div>
+                                    中山东路
+                                </div>
+                                <div>
+                                    <Rate disabled :value="2"></Rate>
+                                </div>
+                                <div>
+                                    维修状态
+                                </div>
+                            </div>
+                        </div>
+                        <div class="footer">
+                            <div class="label">故障原因：</div>
+                            <div class="span">线路故障或供电故障</div>
+                        </div>
+                    </div>
+                    <div class="item-wrapper">
+                        <div class="header">
+                            <div class="img"></div>
+                            <div class="info">
+                                <div>
+                                    中山东路
+                                </div>
+                                <div>
+                                    <Rate disabled :value="2"></Rate>
+                                </div>
+                                <div>
+                                    维修状态
+                                </div>
+                            </div>
+                        </div>
+                        <div class="footer">
+                            <div class="label">故障原因：</div>
+                            <div class="span">线路故障或供电故障</div>
+                        </div>
+                    </div>
+                    <div class="item-wrapper">
+                        <div class="header">
+                            <div class="img"></div>
+                            <div class="info">
+                                <div>
+                                    中山东路
+                                </div>
+                                <div>
+                                    <Rate disabled :value="2"></Rate>
+                                </div>
+                                <div>
+                                    维修状态
+                                </div>
+                            </div>
+                        </div>
+                        <div class="footer">
+                            <div class="label">故障原因：</div>
+                            <div class="span">线路故障或供电故障</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="layout-content-right-item">
+                    <div class="title">自动修复</div>
                 </div>
             </div>
         </div>
