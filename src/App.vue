@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import IndexPage from "./components/IndexPage";
+import IndexPage from "./components/Index";
 
 export default {
   name: "App",
@@ -26,6 +26,7 @@ body,
 html {
   width: 100%;
   height: 100%;
+  font-size: 14px;
 }
 #app {
   width: 100%;
