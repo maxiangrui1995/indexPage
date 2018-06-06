@@ -1,28 +1,59 @@
 <template>
-    <div class="box">
-        <div class="title">运维节点</div>
-        <div class="left">
-            <div class="info">
-                <span class="total">1430</span>
-                <span class="title">总节点(个)</span>
-            </div>
-        </div>
-        <div class="right">
-            <div class="info">
-                <span class="total">33</span>
-                <span class="title">运行节点(个)</span>
-            </div>
-        </div>
+  <div class="box">
+    <div class="title">运维节点</div>
+    <div class="left">
+      <div class="info">
+        <span class="total">{{nodes_all}}</span>
+        <span class="title">总节点(个)</span>
+      </div>
     </div>
+    <div class="right">
+      <div class="info">
+        <span class="total">{{node_loding}}</span>
+        <span class="title">运行节点(个)</span>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
-export default {};
+export default {
+  data() {
+    return {
+      nodes_all: 0,
+      node_loding: 0
+    };
+  },
+  methods: {
+    loadData() {
+      this.NumAutoPlusAnimation("nodes_all", {
+        num: 1334
+      });
+      this.NumAutoPlusAnimation("node_loding", {
+        num: 33
+      });
+    },
+    NumAutoPlusAnimation(count, options) {
+      let finalNum = options.num;
+      let step = Math.floor(finalNum / (1500 / 50));
+      let timer = setInterval(() => {
+        this[count] += step;
+        if (this[count] >= finalNum) {
+          clearInterval(timer);
+        }
+      }, 50);
+    }
+  },
+  created() {
+    this.loadData();
+  }
+};
 </script>
 
 <style scoped lang="less">
 .box {
-  height: 200px;
+  height: 160px;
+  margin-top: 30px;
   > .title {
     width: 342px;
     height: 45px;

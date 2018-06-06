@@ -28,6 +28,7 @@ export default {};
 <style scoped lang="less">
 .box {
   height: 200px;
+  margin-top: 40px;
   .title {
     width: 342px;
     height: 45px;

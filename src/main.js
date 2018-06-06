@@ -4,6 +4,7 @@ import Vue from 'vue'
 import App from './App'
 import iView from 'iview';
 import 'iview/dist/styles/iview.css';
+import 'vue2-scrollbar/dist/style/vue2-scrollbar.css';
 
 Vue.config.productionTip = false
 
