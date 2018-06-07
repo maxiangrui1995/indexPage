@@ -3,13 +3,13 @@
     <div class="title">运维节点</div>
     <div class="left">
       <div class="info">
-        <span class="total">{{nodes_all}}</span>
+        <span class="total">{{nodes}}</span>
         <span class="title">总节点(个)</span>
       </div>
     </div>
     <div class="right">
       <div class="info">
-        <span class="total">{{node_loding}}</span>
+        <span class="total">{{node}}</span>
         <span class="title">运行节点(个)</span>
       </div>
     </div>
@@ -20,32 +20,56 @@
 export default {
   data() {
     return {
-      nodes_all: 0,
-      node_loding: 0
+      // 总节点
+      nodes: 0,
+      nodes_fetch: 0,
+      // 运行节点
+      node: 0,
+      node_fetch: 0
     };
   },
   methods: {
-    loadData() {
-      this.NumAutoPlusAnimation("nodes_all", {
-        num: 1334
-      });
-      this.NumAutoPlusAnimation("node_loding", {
-        num: 33
-      });
-    },
-    NumAutoPlusAnimation(count, options) {
-      let finalNum = options.num;
-      let step = Math.floor(finalNum / (1500 / 50));
+    animationNum(finalNum, originNum, type) {
+      let step = Math.ceil(finalNum / (1500 / 50)); //递增步数
+      step = finalNum < originNum ? -step : step;
+
       let timer = setInterval(() => {
-        this[count] += step;
-        if (this[count] >= finalNum) {
+        originNum += step;
+        if (
+          (step > 0 && originNum >= finalNum) ||
+          (step < 0 && originNum <= finalNum)
+        ) {
+          originNum = finalNum;
           clearInterval(timer);
         }
+        this[type] = originNum;
       }, 50);
+    },
+    loadData() {
+      this.nodes_fetch = 1322;
+      this.node_fetch = 33;
+
+      // Todo
+      let timer = setTimeout(() => {
+        this.nodes_fetch -= 500;
+        this.node_fetch -= 13;
+      }, 4000);
+      let timer2 = setTimeout(() => {
+        this.nodes_fetch += 453;
+        this.node_fetch += 23;
+      }, 8000);
     }
   },
   created() {
     this.loadData();
+  },
+  watch: {
+    nodes_fetch() {
+      this.animationNum(this.nodes_fetch, this.nodes, "nodes");
+    },
+    node_fetch() {
+      this.animationNum(this.node_fetch, this.node, "node");
+    }
   }
 };
 </script>

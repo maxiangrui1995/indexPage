@@ -15,22 +15,24 @@
 export default {
   data() {
     return {
-      online: 80,
-      offline: 32
+      online: 0,
+      offline: 0,
+      online_fetch: 0,
+      offline_fetch: 0
     };
   },
   methods: {
-    view(elem, pre) {
+    view(elem, pre, type) {
       let canvas = elem;
       let ctx = canvas.getContext("2d");
       let width = canvas.width;
       let height = canvas.height;
       let wW = width - 60;
 
-      let count = 0;
+      let count = this[type];
+      let step = Math.ceil(pre / (1500 / 50));
+      step = count < pre ? step : -step;
       const render = () => {
-        count += 1;
-
         ctx.clearRect(0, 0, width, height);
         ctx.beginPath();
         ctx.lineWidth = 1;
@@ -41,9 +43,14 @@ export default {
         ctx.font = "14px Arial";
         ctx.fillStyle = "#67c7eb";
         ctx.textBaseline = "top";
-        ctx.fillText(count + "%", wW + 15, 2);
+        ctx.fillText(Math.floor(count) + "%", wW + 15, 2);
 
-        let grd = ctx.createLinearGradient(0, 0, wW, height);
+        let grd = ctx.createLinearGradient(
+          0,
+          0,
+          (wW - 8) * count / 100,
+          height
+        );
         grd.addColorStop(0, "#08478f");
         grd.addColorStop(1, "#67c7eb");
         ctx.fillStyle = grd;
@@ -58,22 +65,42 @@ export default {
         }
         ctx.stroke();
         ctx.closePath();
-        let timer = setInterval(() => {
-          if (count >= pre) {
-            count = pre;
-            clearInterval(timer);
-          }
-          render();
-        }, 150);
       };
       render();
+      let timer = setInterval(() => {
+        count += step;
+        if ((step > 0 && count >= pre) || (step < 0 && count <= pre)) {
+          count = pre;
+          clearInterval(timer);
+        }
+        this[type] = count;
+        render();
+      }, 50);
+    },
+    loadData() {
+      this.online_fetch = 73;
+      this.offline_fetch = 30;
+
+      setTimeout(() => {
+        this.online_fetch = 40;
+        this.offline_fetch = 77;
+      }, 4000);
+      setTimeout(() => {
+        this.online_fetch = 55;
+        this.offline_fetch = 62;
+      }, 8000);
     }
   },
   created() {
-    this.$nextTick(() => {
-      this.view(this.$refs.canvas, this.online);
-      this.view(this.$refs.canvas2, this.offline);
-    });
+    this.loadData();
+  },
+  watch: {
+    online_fetch() {
+      this.view(this.$refs.canvas, this.online_fetch, "online");
+    },
+    offline_fetch() {
+      this.view(this.$refs.canvas2, this.offline_fetch, "offline");
+    }
   }
 };
 </script>
