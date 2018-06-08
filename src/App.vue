@@ -1,16 +1,16 @@
 <template>
   <div id="app">
-    <IndexPage/>
+    <HomePage/>
   </div>
 </template>
 
 <script>
-import IndexPage from "./components/Index";
+import HomePage from "@/page/Home/Index";
 
 export default {
   name: "App",
   components: {
-    IndexPage
+    HomePage
   },
   beforeCreate() {
     this.$Loading.start();
