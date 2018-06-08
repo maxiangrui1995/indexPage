@@ -13,12 +13,13 @@
 
 <script>
 export default {
+  props: { data: Object },
   data() {
     return {
-      online: 0,
-      offline: 0,
-      online_fetch: 0,
-      offline_fetch: 0
+      // 在线
+      on_radio: 0,
+      // 离线
+      off_radio: 0
     };
   },
   methods: {
@@ -76,30 +77,14 @@ export default {
         this[type] = count;
         render();
       }, 50);
-    },
-    loadData() {
-      this.online_fetch = 73;
-      this.offline_fetch = 30;
-
-      setTimeout(() => {
-        this.online_fetch = 40;
-        this.offline_fetch = 77;
-      }, 4000);
-      setTimeout(() => {
-        this.online_fetch = 55;
-        this.offline_fetch = 62;
-      }, 8000);
     }
   },
-  created() {
-    this.loadData();
-  },
   watch: {
-    online_fetch() {
-      this.view(this.$refs.canvas, this.online_fetch, "online");
+    "data.on_radio"() {
+      this.view(this.$refs.canvas, this.data.on_radio, "on_radio");
     },
-    offline_fetch() {
-      this.view(this.$refs.canvas2, this.offline_fetch, "offline");
+    "data.off_radio"() {
+      this.view(this.$refs.canvas2, this.data.off_radio, "off_radio");
     }
   }
 };

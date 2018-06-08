@@ -1,27 +1,29 @@
 <template>
-    <div class="box">
-        <div class="header">
-            <ul class="menu">
-                <li>中山北路路口节点01</li>
-                <li>中山北路路口节点01</li>
-                <li>中山北路路口节点01</li>
-                <li>中山北路路口节点01</li>
-                <li>中山北路路口节点01</li>
-            </ul>
-        </div>
-        <div class="footer">
-            <ul class="menu">
-                <li class="active">某某镇</li>
-                <li>某某镇</li>
-                <li>某某镇</li>
-            </ul>
-            <div class="btn"></div>
-        </div>
+  <div class="box">
+    <div class="header">
+      <ul class="menu">
+        <li>中山北路路口节点01</li>
+        <li>中山北路路口节点01</li>
+        <li>中山北路路口节点01</li>
+        <li>中山北路路口节点01</li>
+        <li>中山北路路口节点01</li>
+      </ul>
     </div>
+    <div class="footer">
+      <ul class="menu">
+        <!--  <li class="active">某某镇</li>
+        <li>某某镇</li>
+        <li>某某镇</li> -->
+        <li v-for="(item,index) in data" :key="index">{{item.name}}</li>
+      </ul>
+      <div class="btn"></div>
+    </div>
+  </div>
 </template>
 
 <script>
 export default {
+  props: { data: Array },
   data() {
     return {};
   }

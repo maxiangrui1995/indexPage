@@ -3,13 +3,13 @@
     <div class="title">运维节点</div>
     <div class="left">
       <div class="info">
-        <span class="total">{{nodes}}</span>
+        <span class="total">{{sum}}</span>
         <span class="title">总节点(个)</span>
       </div>
     </div>
     <div class="right">
       <div class="info">
-        <span class="total">{{node}}</span>
+        <span class="total">{{online}}</span>
         <span class="title">运行节点(个)</span>
       </div>
     </div>
@@ -18,14 +18,14 @@
 
 <script>
 export default {
+  props: {
+    data: Object
+  },
   data() {
     return {
-      // 总节点
-      nodes: 0,
-      nodes_fetch: 0,
-      // 运行节点
-      node: 0,
-      node_fetch: 0
+      sum: 0,
+      online: 0,
+      isInit: false
     };
   },
   methods: {
@@ -44,31 +44,14 @@ export default {
         }
         this[type] = originNum;
       }, 50);
-    },
-    loadData() {
-      this.nodes_fetch = 1322;
-      this.node_fetch = 33;
-
-      // Todo
-      let timer = setTimeout(() => {
-        this.nodes_fetch -= 500;
-        this.node_fetch -= 13;
-      }, 4000);
-      let timer2 = setTimeout(() => {
-        this.nodes_fetch += 453;
-        this.node_fetch += 23;
-      }, 8000);
     }
   },
-  created() {
-    this.loadData();
-  },
   watch: {
-    nodes_fetch() {
-      this.animationNum(this.nodes_fetch, this.nodes, "nodes");
+    "data.sum"() {
+      this.animationNum(this.data.sum, this.sum, "sum");
     },
-    node_fetch() {
-      this.animationNum(this.node_fetch, this.node, "node");
+    "data.online"() {
+      this.animationNum(this.data.online, this.online, "online");
     }
   }
 };

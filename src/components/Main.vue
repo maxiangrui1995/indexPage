@@ -30,7 +30,15 @@
       </div>
     </div>
     <div class="modal5">
-
+      <div class="modal-wrapper">
+        <div class="view">
+          <canvas ref="loading" width="140" height="140"></canvas>
+        </div>
+        <div class="info">
+          <p>正在自动修复中</p>
+          <p>请稍后...</p>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -38,7 +46,90 @@
 <script>
 export default {
   data() {
-    return {};
+    return {
+      loading: 0,
+      loading_fetch: 0
+    };
+  },
+  methods: {
+    draw() {
+      let canvas = this.$refs.loading;
+      let width = canvas.width;
+      let height = canvas.height;
+      let ctx = canvas.getContext("2d");
+      let cx = width / 2;
+      let cy = height / 2;
+      let r = height / 2;
+      let PI = Math.PI;
+
+      let count = this.loading;
+      let finalNum = this.loading_fetch;
+      let step = Math.ceil(finalNum / (1500 / 50));
+      const render = () => {
+        ctx.clearRect(0, 0, width, height);
+
+        // 绘制外圈圆
+        ctx.beginPath();
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = "rgba(23, 136, 228, 0.5)";
+        ctx.fillStyle = "rgba(7, 43, 92, .3)";
+        ctx.arc(cx, cy, r - 1, 0, 2 * PI, false);
+        ctx.stroke();
+        ctx.fill();
+        ctx.save();
+        // 绘制进度
+        ctx.beginPath();
+        ctx.strokeStyle = "#35e7fc";
+        ctx.setLineDash([7]);
+        ctx.lineWidth = 12;
+        let pre = 270 - 360 * count / 100;
+        ctx.arc(cx, cy, r - 12, 270 * PI / 180, pre * PI / 180, true);
+        ctx.stroke();
+        // 绘制内圈
+        ctx.beginPath();
+        ctx.strokeStyle = "rgba(23, 136, 228, 0.2)"; //072b5c
+        ctx.fillStyle = "#0f2860";
+        ctx.lineWidth = 2;
+        ctx.setLineDash([3]);
+        ctx.arc(width / 2, height / 2, r - 25, 0, 2 * PI, false);
+        ctx.stroke();
+        ctx.fill();
+        // 文字
+        ctx.beginPath();
+        ctx.font =
+          "26px PingFang SC,Helvetica,Microsoft YaHei,Arial,sans-serif";
+        ctx.textAlign = "center";
+        ctx.fillStyle = "#fff";
+        ctx.fillText(count + "%", cx, cy - 3);
+        ctx.beginPath();
+        ctx.fillStyle = "#ccc";
+        ctx.font =
+          "12px PingFang SC,Helvetica,Microsoft YaHei,Arial,sans-serif";
+        ctx.fillText(count + " / 100", cx, cy + 18);
+        ctx.restore();
+      };
+      render();
+      let timer = setInterval(() => {
+        count += step;
+        if (count >= finalNum) {
+          count = finalNum;
+          clearInterval(timer);
+        }
+        this.loading = count;
+        render();
+      }, 50);
+    },
+    loadData() {
+      this.loading_fetch = 100;
+    }
+  },
+  created() {
+    this.loadData();
+  },
+  watch: {
+    loading_fetch() {
+      this.draw();
+    }
   }
 };
 </script>
@@ -185,10 +276,29 @@ export default {
     height: 185px;
     background: url("~@/assets/modal04.png");
     color: #fff;
-    padding: 30px 0;
+    padding: 30px 10px;
     position: absolute;
     left: 125px;
     bottom: 35px;
+    .modal-wrapper {
+      display: table;
+      .view {
+        display: table-cell;
+        width: 170px;
+        height: 140px;
+        text-align: center;
+        vertical-align: bottom;
+      }
+      .info {
+        display: table-cell;
+        vertical-align: top;
+        width: 200px;
+        height: 140px;
+        text-align: center;
+        font-size: 1.68em;
+        padding: 30px 0;
+      }
+    }
   }
 }
 </style>

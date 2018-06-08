@@ -1,7 +1,7 @@
 <template>
   <div class="box">
     <div class="title">故障原因</div>
-    <Carousel radius-dot arrow='never' v-model="selectIndex" :style="{width:'479px',height:'615px'}" class="my-carousel">
+    <Carousel radius-dot autoplay arrow='never' v-model="selectIndex" :style="{width:'479px',height:'615px'}" class="my-carousel">
       <CarouselItem :name="0">
         <div class="demo-carousel">
           <div class="wrapper">
@@ -30,10 +30,58 @@
         </div>
       </CarouselItem>
       <CarouselItem :name="1">
-        <div class="demo-carousel">2</div>
+        <div class="demo-carousel">
+          <div class="wrapper">
+            <div class="header">
+              <div class="img"></div>
+              <div class="info">
+                <div class="item">
+                  中山东路
+                  <div class="msg">35m</div>
+                </div>
+                <div class="item">
+                  <Rate :value="5"></Rate>
+                  <div class="msg">40分钟</div>
+                </div>
+                <div class="item">
+                  维修状态
+                  <div class="msg ok">已接单</div>
+                </div>
+              </div>
+            </div>
+            <div class="footer">
+              故障原因：
+              <span>线路故障或供电故障</span>
+            </div>
+          </div>
+        </div>
       </CarouselItem>
       <CarouselItem :name="2">
-        <div class="demo-carousel">3</div>
+        <div class="demo-carousel">
+          <div class="wrapper">
+            <div class="header">
+              <div class="img"></div>
+              <div class="info">
+                <div class="item">
+                  中山东路
+                  <div class="msg">35m</div>
+                </div>
+                <div class="item">
+                  <Rate :value="5"></Rate>
+                  <div class="msg">40分钟</div>
+                </div>
+                <div class="item">
+                  维修状态
+                  <div class="msg ok">已接单</div>
+                </div>
+              </div>
+            </div>
+            <div class="footer">
+              故障原因：
+              <span>线路故障或供电故障</span>
+            </div>
+          </div>
+        </div>
       </CarouselItem>
     </Carousel>
   </div>

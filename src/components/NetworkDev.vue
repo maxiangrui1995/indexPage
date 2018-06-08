@@ -5,25 +5,13 @@
       <div class="table-header">
         <div class="tr">
           <div class="td">设备</div>
-          <div class="td">正常</div>
-          <div class="td">故障</div>
+          <div class="td">统计</div>
         </div>
       </div>
       <div class="table-body">
-        <!-- <div class="tr">
-          <div class="td">摄像机</div>
-          <div class="td success">2344</div>
-          <div class="td error">43</div>
-        </div>
-        <div class="tr">
-          <div class="td">供电</div>
-          <div class="td success">45</div>
-          <div class="td error">543</div>
-        </div> -->
         <div class="tr" v-for="(item,index) in data" :key="index">
           <div class="td">{{item.name}}</div>
-          <div class="td success">{{item.success}}</div>
-          <div class="td error">{{item.error}}</div>
+          <div class="td success">{{item.count}}</div>
         </div>
       </div>
     </div>
@@ -32,49 +20,11 @@
 
 <script>
 export default {
+  props: {
+    data: Array
+  },
   data() {
-    return {
-      data: []
-    };
-  },
-  methods: {
-    loadData() {
-      this.data = [
-        {
-          name: "运维节点",
-          success: "16",
-          error: "43"
-        },
-        {
-          name: "前端设备",
-          success: "13",
-          error: "43"
-        },
-        {
-          name: "网络设备",
-          success: "3",
-          error: "43"
-        },
-        {
-          name: "服务器",
-          success: "2",
-          error: "43"
-        },
-        {
-          name: "动环设备",
-          success: "3",
-          error: "43"
-        },
-        {
-          name: "其他设备",
-          success: "6",
-          error: "43"
-        }
-      ];
-    }
-  },
-  created() {
-    this.loadData();
+    return {};
   }
 };
 </script>
@@ -114,14 +64,13 @@ export default {
         line-height: 38px;
       }
       .td:nth-child(1) {
-        width: 160px;
+        width: 200px;
         text-indent: 8px;
       }
       .td:nth-child(2) {
-        width: 120px;
-      }
-      .td:nth-child(3) {
-        width: 80px;
+        width: 160px;
+        text-align: right;
+        padding-right: 40px;
       }
     }
     .table-header {

@@ -1,34 +1,45 @@
 <template>
-    <div class="box">
-        <div class="title">自动修复</div>
-        <div class="wrapper">
-            <div class="view">
-                <canvas ref="view" width="160" height="160"></canvas>
-                <div class="add">+1</div>
-                <div class="total">1111</div>
-            </div>
-            <div class="info">
-                <div class="item header">
-                    <div>自动修复率</div>
-                    <div class="num">100%</div>
-                </div>
-                <div class="item">
-                    <div>自动修复</div>
-                    <div class="num">1110个</div>
-                </div>
-                <div class="item">
-                    <div>人工修复</div>
-                    <div class="num">10个</div>
-                </div>
-            </div>
+  <div class="box">
+    <div class="title">自动修复</div>
+    <div class="wrapper">
+      <div class="view">
+        <canvas ref="view" width="160" height="160"></canvas>
+        <transition name="slide-fade">
+          <p v-if="show" class="add">+{{1}}</p>
+        </transition>
+        <div class="total">{{total}}</div>
+      </div>
+      <div class="info">
+        <div class="item header">
+          <div>自动修复率</div>
+          <div class="num">{{artificial}}%</div>
         </div>
+        <div class="item">
+          <div>自动修复</div>
+          <div class="num">{{auto_radio}}个</div>
+        </div>
+        <div class="item">
+          <div>人工修复</div>
+          <div class="num">{{automatic}}个</div>
+        </div>
+      </div>
     </div>
+  </div>
 </template>
 
 <script>
 export default {
+  props: {
+    data: Object
+  },
   data() {
-    return {};
+    return {
+      show: false,
+      total: 0, //自动修复数+人工修复数
+      artificial: 0, //自动修复率
+      auto_radio: 0, //自动修复数
+      automatic: 0 //人工修复数
+    };
   },
   methods: {
     view() {
@@ -118,12 +129,47 @@ export default {
       };
 
       render();
+    },
+    animationNum(finalNum, originNum, type) {
+      let step = Math.ceil(finalNum / (1500 / 50)); //递增步数
+      step = finalNum < originNum ? -step : step;
+
+      let timer = setInterval(() => {
+        originNum += step;
+        if (
+          (step > 0 && originNum >= finalNum) ||
+          (step < 0 && originNum <= finalNum)
+        ) {
+          originNum = finalNum;
+          clearInterval(timer);
+        }
+        this[type] = originNum;
+      }, 50);
     }
   },
   created() {
     this.$nextTick(() => {
       this.view();
     });
+  },
+  computed: {
+    TOTAL() {
+      return this.data.auto_radio + this.data.automatic;
+    }
+  },
+  watch: {
+    TOTAL() {
+      this.animationNum(this.TOTAL, this.total, "total");
+    },
+    "data.artificial"() {
+      this.animationNum(this.data.artificial, this.artificial, "artificial");
+    },
+    "data.auto_radio"() {
+      this.animationNum(this.data.auto_radio, this.auto_radio, "auto_radio");
+    },
+    "data.automatic"() {
+      this.animationNum(this.data.automatic, this.automatic, "automatic");
+    }
   }
 };
 </script>
@@ -202,5 +248,23 @@ export default {
       }
     }
   }
+}
+</style>
+<style>
+.slide-fade-enter-active {
+  transition: all 0.3s ease;
+}
+.slide-fade-enter {
+  transform: translatey(10px);
+}
+.slide-fade-leave-active {
+  transition: all 0.3s;
+}
+.slide-fade-leave-to {
+  transform: translatey(-10px);
+}
+.slide-fade-enter,
+.slide-fade-leave-to {
+  opacity: 0;
 }
 </style>
