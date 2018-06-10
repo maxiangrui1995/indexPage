@@ -1,7 +1,7 @@
 <template>
-    <div class="wrappper">
-        <div class="logo"></div>
-    </div>
+  <div class="wrappper">
+    <div class="logo"></div>
+  </div>
 </template>
 
 <script>
@@ -12,7 +12,7 @@ export default {};
 .wrappper {
   width: 100%;
   height: 78px;
-  background: url("~@/assets/topbg.png") no-repeat;
+  background: url("~@/assets/header.png") top 100% no-repeat;
 }
 .logo {
   width: 261px;
