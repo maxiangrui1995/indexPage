@@ -2,6 +2,11 @@
   <div class="box">
     <div class="bg-left"></div>
     <div class="bg-right"></div>
+    <transition name="animate-warning">
+      <div v-show="showWarning" class="show-warning">
+        警告
+      </div>
+    </transition>
     <transition name="animate1">
       <div class="modal1" v-show="show1">
         <p class="title">
@@ -64,7 +69,9 @@ export default {
       show2: false,
       show3: false,
       show4: false,
-      show5: false
+      show5: false,
+
+      showWarning: false
     };
   },
   methods: {
@@ -142,12 +149,24 @@ export default {
   created() {
     this.loadData();
 
-    setInterval(() => {
-      this.show1 = !this.show1;
+    setTimeout(() => {
+      this.showWarning = !this.showWarning;
+      // 故障
       this.show2 = !this.show2;
-      this.show3 = !this.show3;
-      this.show4 = !this.show4;
-      this.show5 = !this.show5;
+      setTimeout(() => {
+        this.showWarning = !this.showWarning;
+        this.show4 = !this.show4;
+        setTimeout(() => {
+          this.show3 = !this.show3;
+
+          // 消失
+          setTimeout(() => {
+            this.show2 = !this.show2;
+            this.show3 = !this.show3;
+            this.show4 = !this.show4;
+          }, 2000);
+        }, 1000);
+      }, 1000);
     }, 2000);
   },
   watch: {
@@ -190,12 +209,12 @@ export default {
     opacity: 0;
   }
   100% {
-    left: 35px;
+    left: 104px;
     opacity: 1;
   }
 }
 .animate2-enter-active {
-  animation: animate-2 0.5s;
+  animation: animate-2 1.5s;
 }
 .animate2-leave-active {
   animation: animate-2 0.5s reverse;
@@ -210,11 +229,32 @@ export default {
     transform: scale(1);
   }
 }
+@keyframes animate-3-1 {
+  0% {
+    transform: rotateZ(0deg) scale(1);
+  }
+  30% {
+    opacity: 1;
+    transform: rotateZ(30%) scale(0.4, 1);
+  }
+  50% {
+    opacity: 1;
+    transform: rotateZ(1024deg) scale(0.4, 1);
+    top: 160px;
+    left: 965px;
+  }
+  100% {
+    opacity: 0;
+    transform: rotateZ(1440deg) scale(0.4, 1);
+    top: 160px;
+    left: 965px;
+  }
+}
 .animate3-enter-active {
   animation: animate-3 0.5s;
 }
 .animate3-leave-active {
-  animation: animate-3 0.5s reverse;
+  animation: animate-3-1 2.6s linear;
 }
 @keyframes animate-4 {
   0% {
@@ -223,11 +263,11 @@ export default {
   }
   100% {
     opacity: 1;
-    right: -16px;
+    right: 145px;
   }
 }
 .animate4-enter-active {
-  animation: animate-4 0.5s;
+  animation: animate-4 2s;
 }
 .animate4-leave-active {
   animation: animate-4 0.5s reverse;
@@ -247,6 +287,19 @@ export default {
 }
 .animate5-leave-active {
   animation: animate-5 0.5s reverse;
+}
+
+.show-warning {
+  width: 80px;
+  height: 60px;
+  position: absolute;
+  top: 50px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #ff5b5b;
+  font-size: 1.28em;
+  font-weight: 700;
+  animation: all 0.3s;
 }
 
 .box {
@@ -321,8 +374,8 @@ export default {
     font-size: 1.28em;
     padding: 30px 0;
     position: absolute;
-    top: 190px;
-    left: 35px;
+    top: 121px;
+    left: 104px;
     .title {
       height: 30px;
       line-height: 30px;
@@ -336,8 +389,8 @@ export default {
     color: #fff;
     padding: 30px 0;
     position: absolute;
-    top: 290px;
-    left: 220px;
+    top: 390px;
+    left: 140px;
     .title {
       height: 30px;
       line-height: 30px;
@@ -351,8 +404,8 @@ export default {
     color: #fff;
     padding: 30px 0;
     position: absolute;
-    top: 250px;
-    right: -16px;
+    top: 206px;
+    right: 145px;
     .title {
       color: #ff5b5b;
       font-size: 1.28em;
