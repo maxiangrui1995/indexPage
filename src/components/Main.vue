@@ -2,44 +2,54 @@
   <div class="box">
     <div class="bg-left"></div>
     <div class="bg-right"></div>
-    <div class="modal1">
-      <p class="title">
-        维修单位：
-        <span>南京盾华智慧交通</span>
-      </p>
-      <p class="title">
-        维修状态：
-        <span>已接单</span>
-      </p>
-    </div>
-    <div class="modal2">
-      <p class="title">中山北路和太平路口摄像机故障</p>
-    </div>
-    <div class="modal3">
-      <p class="title">故障内容故障内容故障内容故障内容故障内容故障内容故障内容故障内容故障内容故障内容故障内容</p>
-    </div>
-    <div class="modal4">
-      <div class="title">供电故障</div>
-      <div class="info">
-        地点：
-        <span>中山北路和太平路</span>
+    <transition name="animate1">
+      <div class="modal1" v-show="show1">
+        <p class="title">
+          维修单位：
+          <span>南京盾华智慧交通</span>
+        </p>
+        <p class="title">
+          维修状态：
+          <span>已接单</span>
+        </p>
       </div>
-      <div class="info">
-        原因：
-        <span>市政停电检修</span>
+    </transition>
+    <transition name="animate2">
+      <div class="modal2" v-show="show2">
+        <p class="title">中山北路和太平路口摄像机故障</p>
       </div>
-    </div>
-    <div class="modal5">
-      <div class="modal-wrapper">
-        <div class="view">
-          <canvas ref="loading" width="140" height="140"></canvas>
+    </transition>
+    <transition name="animate3">
+      <div class="modal3" v-show="show3">
+        <p class="title">故障内容故障内容故障内容故障内容故障内容故障内容故障内容故障内容故障内容故障内容故障内容</p>
+      </div>
+    </transition>
+    <transition name="animate4">
+      <div class="modal4" v-show="show4">
+        <div class="title">供电故障</div>
+        <div class="info">
+          地点：
+          <span>中山北路和太平路</span>
         </div>
         <div class="info">
-          <p>正在自动修复中</p>
-          <p>请稍后...</p>
+          原因：
+          <span>市政停电检修</span>
         </div>
       </div>
-    </div>
+    </transition>
+    <transition name="animate5">
+      <div class="modal5" v-show="show5">
+        <div class="modal-wrapper">
+          <div class="view">
+            <canvas ref="loading" width="140" height="140"></canvas>
+          </div>
+          <div class="info">
+            <p>正在自动修复中</p>
+            <p>请稍后...</p>
+          </div>
+        </div>
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -48,7 +58,13 @@ export default {
   data() {
     return {
       loading: 0,
-      loading_fetch: 0
+      loading_fetch: 0,
+
+      show1: false,
+      show2: false,
+      show3: false,
+      show4: false,
+      show5: false
     };
   },
   methods: {
@@ -125,6 +141,14 @@ export default {
   },
   created() {
     this.loadData();
+
+    setInterval(() => {
+      this.show1 = !this.show1;
+      this.show2 = !this.show2;
+      this.show3 = !this.show3;
+      this.show4 = !this.show4;
+      this.show5 = !this.show5;
+    }, 2000);
   },
   watch: {
     loading_fetch() {
@@ -144,14 +168,87 @@ export default {
   }
 }
 
-@keyframes anim-circle-anticlockwise {
-  from {
-    transform: rotateZ(0deg);
+@keyframes animate-1 {
+  0% {
+    top: 0;
+    opacity: 0;
   }
-  to {
-    transform: rotateZ(-360deg);
+  100% {
+    top: 50px;
+    opacity: 1;
   }
 }
+.animate1-enter-active {
+  animation: animate-1 0.5s;
+}
+.animate1-leave-active {
+  animation: animate-1 0.5s reverse;
+}
+@keyframes animate-2 {
+  0% {
+    left: 0;
+    opacity: 0;
+  }
+  100% {
+    left: 35px;
+    opacity: 1;
+  }
+}
+.animate2-enter-active {
+  animation: animate-2 0.5s;
+}
+.animate2-leave-active {
+  animation: animate-2 0.5s reverse;
+}
+@keyframes animate-3 {
+  0% {
+    opacity: 0;
+    transform: scale(0);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+.animate3-enter-active {
+  animation: animate-3 0.5s;
+}
+.animate3-leave-active {
+  animation: animate-3 0.5s reverse;
+}
+@keyframes animate-4 {
+  0% {
+    opacity: 0;
+    right: 0;
+  }
+  100% {
+    opacity: 1;
+    right: -16px;
+  }
+}
+.animate4-enter-active {
+  animation: animate-4 0.5s;
+}
+.animate4-leave-active {
+  animation: animate-4 0.5s reverse;
+}
+@keyframes animate-5 {
+  0% {
+    opacity: 0;
+    bottom: 0;
+  }
+  100% {
+    opacity: 1;
+    bottom: 35px;
+  }
+}
+.animate5-enter-active {
+  animation: animate-5 0.5s;
+}
+.animate5-leave-active {
+  animation: animate-5 0.5s reverse;
+}
+
 .box {
   width: 934px;
   height: 675px;
@@ -193,7 +290,7 @@ export default {
       background: url("~@/assets/circle.png") no-repeat;
       transform-origin: 500px 340px;
       background-position: 185px -48px;
-      animation: anim-circle-anticlockwise 25s linear infinite;
+      animation: anim-circle 25s linear infinite reverse;
       animation-fill-mode: both;
     }
   }
