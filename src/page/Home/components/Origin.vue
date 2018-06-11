@@ -11,10 +11,10 @@
     </div>
     <div class="nav">
       <ul class="menu">
-        <li class="node active">某某镇</li>
+        <!-- <li class="node active">某某镇</li>
         <li class="node">某某镇</li>
-        <li class="node">某某镇</li>
-        <!-- <li v-for="(item,index) in data" :key="index">{{item.name}}</li> -->
+        <li class="node">某某镇</li> -->
+        <li v-for="(item,index) in dd" :key="index" class="node">{{item.name}}</li>
       </ul>
       <div class="btn">
         <div class="prev"></div>
@@ -28,7 +28,21 @@
 export default {
   props: { data: Array },
   data() {
-    return {};
+    return {
+      page: 1,
+      rows: 5,
+      dd: [
+        { name: "墩头镇" },
+        { name: "墩头镇" },
+        { name: "墩头镇" },
+        { name: "墩头镇" },
+        { name: "墩头镇" },
+        { name: "墩头镇" },
+        { name: "墩头镇" },
+        { name: "墩头镇" },
+        { name: "墩头镇" }
+      ]
+    };
   }
 };
 </script>
@@ -70,6 +84,7 @@ export default {
     .menu {
       width: 800px;
       height: 30px;
+      overflow: hidden;
       li {
         float: left;
         list-style: none;

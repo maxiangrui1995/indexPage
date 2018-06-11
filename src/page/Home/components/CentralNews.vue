@@ -1,46 +1,56 @@
 <template>
-    <div class="wrapper">
-        <div class="wrapper-bg"></div>
-        <div class="wrapper-bg"></div>
-        <div class="msg-header">
-            <div class="item">
-                维修单位：
-                <span>南京盾华智慧交通</span>
-            </div>
-            <div class="item">
-                维修状态：
-                <span>已接单</span>
-            </div>
+  <div class="wrapper">
+    <div class="wrapper-bg"></div>
+    <div class="wrapper-bg"></div>
+    <transition name="msg-head">
+      <div class="msg-head" v-show="msgHead">
+        <div class="item">
+          维修单位：
+          <span>南京盾华智慧交通</span>
         </div>
-        <div class="msg-type">
-            <div class="info">中山北路和太平路口摄像机故障</div>
+        <div class="item">
+          维修状态：
+          <span>已接单</span>
         </div>
-        <div class="msg-content">
-            <div class="title">内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容</div>
+      </div>
+    </transition>
+    <transition name="msg-type">
+      <div class="msg-type" v-show="msgType">
+        <div class="info">中山北路和太平路口摄像机故障</div>
+      </div>
+    </transition>
+    <transition name="msg-content">
+      <div class="msg-content" v-show="msgContent">
+        <div class="title">内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容</div>
+      </div>
+    </transition>
+    <transition name="msg-grade">
+      <div class="msg-grade" v-show="msgGrade">
+        <div class="title">供电故障</div>
+        <div class="info">
+          地点：
+          <span>中山北路和太平路</span>
         </div>
-        <div class="msg-grade">
-            <div class="title">供电故障</div>
-            <div class="info">
-                地点：
-                <span>中山北路和太平路</span>
-            </div>
-            <div class="info">
-                原因：
-                <span>市政停电检修</span>
-            </div>
+        <div class="info">
+          原因：
+          <span>市政停电检修</span>
         </div>
-        <div class="msg-loading">
-            <div class="modal-wrapper">
-                <div class="view">
-                    <canvas ref="canvas_loading" width="140" height="140"></canvas>
-                </div>
-                <div class="info">
-                    <p>正在自动修复中</p>
-                    <p>请稍后...</p>
-                </div>
-            </div>
+      </div>
+    </transition>
+    <transition name="msg-grade">
+      <div class="msg-loading" v-show="msgLoading">
+        <div class="modal-wrapper">
+          <div class="view">
+            <canvas ref="canvas_loading" width="140" height="140"></canvas>
+          </div>
+          <div class="info">
+            <p>正在自动修复中</p>
+            <p>请稍后...</p>
+          </div>
         </div>
-    </div>
+      </div>
+    </transition>
+  </div>
 </template>
 
 <script>
@@ -48,7 +58,13 @@ export default {
   data() {
     return {
       loading: 0,
-      loading_fetch: 0
+      loading_fetch: 0,
+      // 动画
+      msgHead: false,
+      msgType: false,
+      msgContent: false,
+      msgGrade: false,
+      msgLoading: false
     };
   },
   methods: {
@@ -121,6 +137,17 @@ export default {
     },
     loadData() {
       this.loading_fetch = 100;
+
+      setTimeout(() => {
+        this.msgType = !this.msgType;
+        this.msgContent = !this.msgContent;
+        this.msgGrade = !this.msgGrade;
+        setTimeout(() => {
+          this.msgType = !this.msgType;
+          this.msgContent = !this.msgContent;
+          this.msgGrade = !this.msgGrade;
+        }, 2000);
+      }, 2000);
     }
   },
   created() {
@@ -137,6 +164,7 @@ export default {
 </script>
 
 <style scoped lang='less'>
+// 动画-圆转圈
 @keyframes anim-circle {
   from {
     transform: rotateZ(0deg);
@@ -154,7 +182,8 @@ export default {
     transform: rotateZ(-360deg);
   }
 }
-@keyframes msg-header {
+// 动画-head
+@keyframes anim-msg-head {
   0% {
     top: 0;
     opacity: 0;
@@ -164,7 +193,78 @@ export default {
     opacity: 1;
   }
 }
-
+// 动画-type
+@keyframes anim-msg-type {
+  0% {
+    left: 0;
+    opacity: 0;
+  }
+  100% {
+    left: 104px;
+    opacity: 1;
+  }
+}
+.msg-type-enter-active {
+  animation: anim-msg-type 1.5s;
+}
+.msg-type-leave-active {
+  animation: anim-msg-type 0.5s reverse;
+}
+// 动画-content
+@keyframes anim-msg-content {
+  0% {
+    opacity: 0;
+    transform: scale(0);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+@keyframes anim-msg-content-leave {
+  0% {
+    transform: rotateZ(0deg) scale(1);
+  }
+  30% {
+    opacity: 1;
+    transform: rotateZ(30%) scale(0.4, 1);
+  }
+  50% {
+    opacity: 1;
+    transform: rotateZ(1024deg) scale(0.4, 1);
+    top: 160px;
+    left: 965px;
+  }
+  100% {
+    opacity: 0;
+    transform: rotateZ(1440deg) scale(0.4, 1);
+    top: 160px;
+    left: 965px;
+  }
+}
+.msg-content-enter-active {
+  animation: anim-msg-content 1.5s;
+}
+.msg-content-leave-active {
+  animation: anim-msg-content-leave 2.6s linear;
+}
+// 动画-grade
+@keyframes anim-msg-grade {
+  0% {
+    opacity: 0;
+    right: 0;
+  }
+  100% {
+    opacity: 1;
+    right: 145px;
+  }
+}
+.msg-grade-enter-active {
+  animation: anim-msg-grade 1.5s;
+}
+.msg-grade-leave-active {
+  animation: anim-msg-grade 0.5s reverse;
+}
 .wrapper {
   width: 934px;
   height: 675px;
@@ -207,7 +307,7 @@ export default {
       animation: anim-circle-anticlockwise 60s linear infinite;
     }
   }
-  .msg-header {
+  .msg-head {
     width: 393px;
     height: 126px;
     background: url("~@/assets/modal01.png");
@@ -216,7 +316,7 @@ export default {
     left: 245px;
     color: #38a9fc;
     padding: 30px 0;
-    animation: msg-header 1.5s;
+    animation: msg-head 1.5s;
     .item {
       height: 30px;
       line-height: 30px;
@@ -232,8 +332,8 @@ export default {
     background: url("~@/assets/modal02.png");
     color: #cda952;
     position: absolute;
-    top: 190px;
-    left: 35px;
+    top: 121px;
+    left: 104px;
     .info {
       margin-top: 30px;
       text-indent: 30px;
@@ -246,8 +346,8 @@ export default {
     color: #fff;
     padding: 30px 0;
     position: absolute;
-    top: 290px;
-    left: 220px;
+    top: 390px;
+    left: 140px;
     .title {
       height: 30px;
       line-height: 30px;
@@ -261,8 +361,8 @@ export default {
     color: #fff;
     padding: 30px 0;
     position: absolute;
-    top: 250px;
-    right: -16px;
+    top: 206px;
+    right: 145px;
     .title {
       color: #ff5b5b;
       font-size: 1.28em;
