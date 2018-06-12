@@ -1,7 +1,7 @@
 <template>
-    <div class="wrapper">
-        <div class="logo"></div>
-    </div>
+  <div class="wrapper">
+    <div class="logo"></div>
+  </div>
 </template>
 
 <script>
@@ -13,15 +13,6 @@ export default {
 </script>
 
 <style lang="less" scoped>
-@keyframes fade {
-  from {
-    opacity: 0;
-    top: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
 .wrapper {
   width: 100%;
   height: 78px;
@@ -30,11 +21,11 @@ export default {
     width: 261px;
     height: 32px;
     background: url("~@/assets/logo.png") no-repeat;
+    background-size: contain;
     position: absolute;
     left: 50%;
     top: 14px;
     transform: translate(-50%);
-    animation: fade 0.3s;
   }
 }
 </style>

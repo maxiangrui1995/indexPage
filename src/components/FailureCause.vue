@@ -159,7 +159,7 @@ export default {
 }
 </style>
 <style>
-.my-carousel .ivu-carousel-dots li button.radius {
+/* .my-carousel .ivu-carousel-dots li button.radius {
   width: 14px;
   height: 14px;
   margin: 0 16px;
@@ -172,8 +172,8 @@ export default {
 .my-carousel .ivu-carousel-dots {
   height: 40px;
   background: url("~@/assets/lighthight.png") right;
-}
-.my-carousel .ivu-carousel-dots li {
+} */
+/* .my-carousel .ivu-carousel-dots li {
   padding: 12px 0;
-}
+} */
 </style>

@@ -4,7 +4,7 @@ import Vue from "vue";
 import App from "./App";
 import iView from "iview";
 import axios from "axios";
-import "@/mock";
+// import "@/mock";
 import "iview/dist/styles/iview.css";
 import "vue2-scrollbar/dist/style/vue2-scrollbar.css";
 import "./style/index.less";

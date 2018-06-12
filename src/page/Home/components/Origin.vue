@@ -11,14 +11,11 @@
     </div>
     <div class="nav">
       <ul class="menu">
-        <!-- <li class="node active">某某镇</li>
-        <li class="node">某某镇</li>
-        <li class="node">某某镇</li> -->
-        <li v-for="(item,index) in dd" :key="index" class="node">{{item.name}}</li>
+        <li v-for="(item,index) in showData" :key="index" class="node" :title="item.name">{{item.name}}</li>
       </ul>
       <div class="btn">
-        <div class="prev"></div>
-        <div class="next"></div>
+        <div class="prev" @click="changePage(-1)"></div>
+        <div class="next" @click="changePage(1)"></div>
       </div>
     </div>
   </div>
@@ -30,19 +27,37 @@ export default {
   data() {
     return {
       page: 1,
-      rows: 5,
-      dd: [
-        { name: "墩头镇" },
-        { name: "墩头镇" },
-        { name: "墩头镇" },
-        { name: "墩头镇" },
-        { name: "墩头镇" },
-        { name: "墩头镇" },
-        { name: "墩头镇" },
-        { name: "墩头镇" },
-        { name: "墩头镇" }
-      ]
+      rows: 3,
+      showData: []
     };
+  },
+  methods: {
+    changePage(page) {
+      let p = this.page;
+      this.page =
+        p + page <= 0
+          ? 1
+          : (p + page) * this.rows >= this.data.length
+            ? Math.ceil(this.data.length / this.rows)
+            : p + page;
+      this.loadData();
+    },
+    loadData() {
+      this.showData = [];
+      this.data.forEach((item, index) => {
+        if (
+          index >= (this.page - 1) * this.rows &&
+          index < this.page * this.rows
+        ) {
+          this.showData.push(item);
+        }
+      });
+    }
+  },
+  watch: {
+    data() {
+      this.loadData();
+    }
   }
 };
 </script>
@@ -89,6 +104,7 @@ export default {
         float: left;
         list-style: none;
         margin-right: 15px;
+        cursor: pointer;
       }
     }
     .btn {

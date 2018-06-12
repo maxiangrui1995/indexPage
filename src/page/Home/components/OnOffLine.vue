@@ -1,16 +1,16 @@
 <template>
   <div class="wrapper">
     <div class="item">
-      <div class="title">在线</div>
+      <div class="title">实时在线率</div>
       <div class="info">
-        <canvas width="380" height="20" ref="canvas_online"></canvas>
+        <canvas width="370" height="20" ref="canvas_online"></canvas>
         <span>{{on_radio}}%</span>
       </div>
     </div>
     <div class="item">
-      <div class="title">离线</div>
+      <div class="title">实时通断率</div>
       <div class="info">
-        <canvas width="380" height="20" ref="canvas_offline"></canvas>
+        <canvas width="370" height="20" ref="canvas_offline"></canvas>
         <span>{{off_radio}}%</span>
       </div>
     </div>
@@ -95,11 +95,13 @@ export default {
     }
   },
   watch: {
-    "data.on_radio"(newValue) {
+    "data.on_radio"(value) {
+      let newValue = value.toFixed(2);
       this.drawView(this.$refs.canvas_online, newValue);
       this.animatedNumber(newValue, this.on_radio, "on_radio");
     },
-    "data.off_radio"(newValue) {
+    "data.off_radio"(value) {
+      let newValue = value.toFixed(2);
       this.drawView(this.$refs.canvas_offline, newValue);
       this.animatedNumber(newValue, this.off_radio, "off_radio");
     }
@@ -110,7 +112,6 @@ export default {
 <style scoped lang="less">
 .wrapper {
   padding: 0 20px;
-  height: 206px;
   .item {
     color: #fff;
     padding: 4px 0;
@@ -121,7 +122,7 @@ export default {
   .info {
     canvas {
       display: inline-block;
-      width: 380px;
+      width: 370px;
       height: 20px;
       vertical-align: top;
       background: transparent;
@@ -130,7 +131,7 @@ export default {
       display: inline-block;
       height: 20px;
       line-height: 20px;
-      text-indent: 10px;
+      text-indent: 2px;
     }
   }
 }

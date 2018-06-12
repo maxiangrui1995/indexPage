@@ -2,6 +2,7 @@
   <div class="wrapper">
     <div class="wrapper-bg"></div>
     <div class="wrapper-bg"></div>
+    <div class="msg-default" v-show="msgDefault">一些提示信息</div>
     <transition name="msg-head">
       <div class="msg-head" v-show="msgHead">
         <div class="item">
@@ -16,20 +17,20 @@
     </transition>
     <transition name="msg-type">
       <div class="msg-type" v-show="msgType">
-        <div class="info">中山北路和太平路口摄像机故障</div>
+        <div class="info">{{nowShowData.crossing_name}} {{relation.fault_type[nowShowData.fault_type]}}</div>
       </div>
     </transition>
     <transition name="msg-content">
       <div class="msg-content" v-show="msgContent">
-        <div class="title">内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容</div>
+        <div class="title">{{nowShowData.memo}}</div>
       </div>
     </transition>
     <transition name="msg-grade">
       <div class="msg-grade" v-show="msgGrade">
-        <div class="title">供电故障</div>
+        <div class="title">{{relation.message_type[nowShowData.message_type]}}</div>
         <div class="info">
           地点：
-          <span>中山北路和太平路</span>
+          <span>{{nowShowData.crossing_name}}</span>
         </div>
         <div class="info">
           原因：
@@ -37,7 +38,7 @@
         </div>
       </div>
     </transition>
-    <transition name="msg-grade">
+    <transition name="msg-loading">
       <div class="msg-loading" v-show="msgLoading">
         <div class="modal-wrapper">
           <div class="view">
@@ -55,16 +56,56 @@
 
 <script>
 export default {
+  props: { data: Array },
   data() {
+    const relation = {
+      message_type: {
+        "0": "机箱故障",
+        "1": "相机故障",
+        "2": "故障自动修复",
+        "3": "故障人工修复"
+      },
+      fault_type: {
+        "0": "视频正常",
+        "1": "视频打不开",
+        "2": "视频偏色",
+        "3": "视频遮挡",
+        "4": "视频冻结",
+        "5": "亮度异常",
+        "6": "用户名或密码错或设备RTSP服务异常",
+        "7": "设备未提供RTSP协议连结",
+        "8": "设备PING不通，网络故障",
+        "9": "提供的ID编号或url有误 ",
+        "50": "设备故障",
+        "52": "网络故障",
+        "54": "服务器离线",
+        "100": "供电故障",
+        "102": "网络连接故障",
+        "104": "光端机激光输出故障",
+        "106": "光端机电路故障",
+        "108": "机箱停电故障",
+        "110": "设备故障",
+        "112": "空开故障",
+        "114": "门禁检测"
+      }
+    };
     return {
       loading: 0,
       loading_fetch: 0,
+      // 字段关系
+      relation: relation,
       // 动画
       msgHead: false,
       msgType: false,
       msgContent: false,
       msgGrade: false,
-      msgLoading: false
+      msgLoading: false,
+      // 过渡状态
+      msgDefault: true,
+      // 实时请求的数据
+      featchData: [],
+      // 当前展示的数据
+      nowShowData: {}
     };
   },
   methods: {
@@ -135,29 +176,54 @@ export default {
         render();
       }, 50);
     },
+    // 实时请求新数据 5s
     loadData() {
-      this.loading_fetch = 100;
-
-      setTimeout(() => {
-        this.msgType = !this.msgType;
-        this.msgContent = !this.msgContent;
-        this.msgGrade = !this.msgGrade;
+      setInterval(() => {
+        this.$http.post("Ma_zong/controlCenter").then(res => {
+          if (res.data.status === "1") {
+            this.featchData.push(...res.data.data);
+          }
+        });
+      }, 5000);
+    },
+    // 定义线程
+    lwp() {
+      let data = this.data;
+      //
+      if (data.length) {
+        this.nowShowData = this.data[0];
         setTimeout(() => {
           this.msgType = !this.msgType;
           this.msgContent = !this.msgContent;
           this.msgGrade = !this.msgGrade;
+          this.msgDefault = !this.msgDefault;
+          setTimeout(() => {
+            this.msgType = !this.msgType;
+            this.msgContent = !this.msgContent;
+            this.msgGrade = !this.msgGrade;
+          }, 4000);
+          setTimeout(() => {
+            this.msgDefault = !this.msgDefault;
+            this.data.shift();
+          }, 6600);
         }, 2000);
-      }, 2000);
+      } else {
+        if (this.featchData.length) {
+          this.data.push(...this.featchData);
+          this.featchData = [];
+        }
+      }
     }
   },
   created() {
-    this.$nextTick(() => {
-      this.loadData();
-    });
+    this.loadData();
   },
   watch: {
     loading_fetch() {
       this.draw();
+    },
+    data(value) {
+      this.lwp();
     }
   }
 };
@@ -265,6 +331,27 @@ export default {
 .msg-grade-leave-active {
   animation: anim-msg-grade 0.5s reverse;
 }
+
+//过渡
+@keyframes anim-msg-default {
+  0% {
+    opacity: 0.4;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+.msg-default {
+  display: inline-block;
+  position: absolute;
+  color: #ff5b5b;
+  top: 50px;
+  left: 50%;
+  transform: translateX(-50%);
+  animation: anim-msg-default 1.5s linear infinite;
+  animation-fill-mode: both;
+}
+
 .wrapper {
   width: 934px;
   height: 675px;

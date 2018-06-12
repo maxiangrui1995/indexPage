@@ -61,6 +61,7 @@ export default {
 
 <style scoped lang="less">
 .wrapper {
+  padding-bottom: 20px;
   .header {
     width: 342px;
     height: 45px;

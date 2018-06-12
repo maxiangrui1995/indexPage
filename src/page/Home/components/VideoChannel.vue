@@ -8,10 +8,10 @@
           <div class="node">潘黄镇</div>
         </div>
         <div class="item">
-          <div class="info">设备厂家：海康</div>
-          <div class="info">生命周期：3年</div>
-          <div class="info">品牌型号：N-60</div>
-          <div class="info">建设单位：中威</div>
+          <div class="info">设备厂家：{{data.sdk}}</div>
+          <div class="info">生命周期：{{data.valid_time}}年</div>
+          <div class="info">品牌型号：{{data.brand}}-{{data.model}}</div>
+          <div class="info">建设单位：{{data.build_company}}</div>
         </div>
       </div>
     </div>
@@ -19,7 +19,15 @@
 </template>
 
 <script>
-export default {};
+export default {
+  props: {
+    data: Object
+  },
+  methods: {},
+  watch: {
+    data() {}
+  }
+};
 </script>
 
 <style lang="less" scoped>
@@ -28,7 +36,6 @@ export default {};
   height: 390px;
   background: url("~@/assets/2.png");
   position: relative;
-  margin-bottom: 40px;
   .title {
     width: 100px;
     height: 30px;
@@ -40,20 +47,19 @@ export default {};
   }
   .box {
     width: 430px;
-    height: 334px;
+    height: 335px;
     position: absolute;
-    top: 45px;
-    left: 25px;
+    top: 40px;
+    left: 23px;
     .header {
-      width: 100%;
+      width: 430px;
       height: 260px;
       background: url("~@/assets/video.png");
     }
     .body {
       display: table;
-      width: 100%;
-      height: 70px;
-      margin-top: 5px;
+      width: 430px;
+      height: 75px;
       .item {
         display: table-cell;
       }
@@ -70,6 +76,7 @@ export default {};
           line-height: 30px;
           color: #cacaca;
           font-size: 14px;
+          padding-top: 5px;
           text-overflow: ellipsis;
           overflow: hidden;
           white-space: nowrap;
