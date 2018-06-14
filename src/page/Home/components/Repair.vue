@@ -1,30 +1,30 @@
 <template>
-    <div class="wrapper">
-        <div class="title">自动修复</div>
-        <div class="box">
-            <div class="view">
-                <canvas ref="view" width="160" height="160"></canvas>
-                <transition name="slide-fade">
-                    <p v-if="show" class="add">+{{1}}</p>
-                </transition>
-                <div class="total">{{total}}</div>
-            </div>
-            <div class="info">
-                <div class="item header">
-                    <div>自动修复率</div>
-                    <div class="num">{{artificial}}%</div>
-                </div>
-                <div class="item">
-                    <div>自动修复</div>
-                    <div class="num">{{auto_radio}}个</div>
-                </div>
-                <div class="item">
-                    <div>人工修复</div>
-                    <div class="num">{{automatic}}个</div>
-                </div>
-            </div>
+  <div class="wrapper">
+    <div class="title">自动修复</div>
+    <div class="box">
+      <div class="view">
+        <canvas ref="view" width="160" height="160"></canvas>
+        <transition name="num-plus">
+          <p v-if="show" class="add">+{{1}}</p>
+        </transition>
+        <div class="total">{{total}}</div>
+      </div>
+      <div class="info">
+        <div class="item header">
+          <div>自动修复率</div>
+          <div class="num">{{artificial}}%</div>
         </div>
+        <div class="item">
+          <div>自动修复</div>
+          <div class="num">{{auto_radio}}个</div>
+        </div>
+        <div class="item">
+          <div>人工修复</div>
+          <div class="num">{{automatic}}个</div>
+        </div>
+      </div>
     </div>
+  </div>
 </template>
 
 <script>
@@ -155,20 +155,38 @@ export default {
   computed: {
     TOTAL() {
       return this.data.auto_radio + this.data.automatic;
+    },
+    msgRequire() {
+      return this.$store.state.msgRequire;
     }
   },
   watch: {
     TOTAL() {
       this.animationNum(this.TOTAL, this.total, "total");
     },
-    "data.artificial"() {
-      this.animationNum(this.data.artificial, this.artificial, "artificial");
+    "data.artificial"(value) {
+      this.animationNum(value, this.artificial, "artificial");
     },
-    "data.auto_radio"() {
-      this.animationNum(this.data.auto_radio, this.auto_radio, "auto_radio");
+    "data.auto_radio"(value) {
+      this.animationNum(value, this.auto_radio, "auto_radio");
     },
-    "data.automatic"() {
-      this.animationNum(this.data.automatic, this.automatic, "automatic");
+    "data.automatic"(value) {
+      this.animationNum(value, this.automatic, "automatic");
+    },
+    msgRequire(value) {
+      if (value) {
+        this.show = !this.show;
+        if (value.message_type == "2") {
+          this.auto_radio++;
+        }
+        if (value.message_type == "3") {
+          this.automatic++;
+        }
+        this.total++;
+        setTimeout(() => {
+          this.show = !this.show;
+        }, 2000);
+      }
     }
   }
 };
@@ -249,20 +267,20 @@ export default {
     }
   }
 }
-.slide-fade-enter-active {
-  transition: all 0.3s ease;
+.num-plus-enter-active {
+  transition: all 0.4s ease;
 }
-.slide-fade-enter {
+.num-plus-enter {
   transform: translatey(10px);
 }
-.slide-fade-leave-active {
-  transition: all 0.3s;
+.num-plus-leave-active {
+  transition: all 1s;
 }
-.slide-fade-leave-to {
-  transform: translatey(-10px);
+.num-plus-leave-to {
+  transform: translatey(-20px);
 }
-.slide-fade-enter,
-.slide-fade-leave-to {
+.num-plus-enter,
+.num-plus-leave-to {
   opacity: 0;
 }
 </style>

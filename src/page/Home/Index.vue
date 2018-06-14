@@ -12,7 +12,7 @@
         <div class="content">
           <YMenus/>
           <YCentralNews :data="control_center" />
-          <YOrigin :data="organize_show" />
+          <YOrigin :data="organize_show" :child="crossing_box" />
         </div>
         <div class="sider">
           <YFailure :data="current_fault" />
@@ -60,6 +60,8 @@ export default {
       count_assets: [],
       // 组织机构
       organize_show: [],
+      // 组织机构children
+      crossing_box: [],
       // 视频
       play_video: {},
       // 自动修复
@@ -94,6 +96,9 @@ export default {
         // 组织机构
         let organize_show = data.organize_show;
         this.organize_show = organize_show;
+        // 第一个组织机构下的机箱数据
+        let crossing_box = data.crossing_box;
+        this.crossing_box = crossing_box;
         // 视频
         let play_video = data.play_video[0] || {};
         this.play_video = play_video;
@@ -108,6 +113,9 @@ export default {
         // 故障原因
         let current_fault = data.current_fault;
         this.current_fault = current_fault;
+
+        this.$store.commit("setOriganizeShow", organize_show[0]);
+        this.$store.commit("setCrossingBox", crossing_box);
       });
     }
   },

@@ -1,17 +1,28 @@
 <template>
   <div class="wrapper">
     <div class="title hightlight">视频通道</div>
+    <div class="selectbox">
+      <Dropdown @on-click="dropDownItemSelect">
+        <a href="javascript:void(0)">
+          {{dropMenuSelected.dev_name}}
+          <Icon type="arrow-down-b"></Icon>
+        </a>
+        <DropdownMenu slot="list">
+          <DropdownItem v-for="(item,index) in crossing_box" :key="index" :name="item.dev_name">{{item.dev_name}}</DropdownItem>
+        </DropdownMenu>
+      </Dropdown>
+    </div>
     <div class="box">
       <div class="header"></div>
       <div class="body">
         <div class="item">
-          <div class="node">潘黄镇</div>
+          <div class="node">{{organize_show.name}}</div>
         </div>
         <div class="item">
-          <div class="info">设备厂家：{{data.sdk}}</div>
-          <div class="info">生命周期：{{data.valid_time}}年</div>
-          <div class="info">品牌型号：{{data.brand}}-{{data.model}}</div>
-          <div class="info">建设单位：{{data.build_company}}</div>
+          <div class="info">设备厂家：{{devData.sdk}}</div>
+          <div class="info">生命周期：{{devData.valid_time}}年</div>
+          <div class="info">品牌型号：{{devData.brand}}-{{devData.model}}</div>
+          <div class="info">建设单位：{{devData.build_company}}</div>
         </div>
       </div>
     </div>
@@ -23,9 +34,48 @@ export default {
   props: {
     data: Object
   },
-  methods: {},
+  data() {
+    return {
+      dropMenuSelected: {},
+      devData: {}
+    };
+  },
+  methods: {
+    dropDownItemSelect(name) {
+      this.crossing_box.forEach(item => {
+        if (item.dev_name === name) {
+          console.log(item);
+
+          this.dropMenuSelected = item;
+          this.loadData();
+        }
+      });
+    },
+    loadData() {
+      this.$http
+        .post("Ma_zong/playVideo", {
+          dev_code: this.dropMenuSelected.dev_code
+        })
+        .then(res => {
+          let data = res.data;
+          this.devData = data.data;
+        });
+    }
+  },
+  computed: {
+    organize_show(value) {
+      return this.$store.state.organize_show_selected;
+    },
+    crossing_box(value) {
+      return this.$store.state.crossing_box_selected;
+    }
+  },
   watch: {
-    data() {}
+    organize_show(value) {},
+    crossing_box(value) {
+      this.dropMenuSelected = value[0];
+      this.loadData();
+    }
   }
 };
 </script>
@@ -44,6 +94,17 @@ export default {
     position: absolute;
     top: -6px;
     left: 110px;
+  }
+  .selectbox {
+    position: absolute;
+    left: 235px;
+    top: 10px;
+    a {
+      color: #d0ab54;
+      &:hover {
+        color: fade(#d0ab54, 80%);
+      }
+    }
   }
   .box {
     width: 430px;

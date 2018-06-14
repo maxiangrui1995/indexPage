@@ -2,16 +2,12 @@
   <div class="wrapper">
     <div class="content">
       <ul class="menu">
-        <li>中山北路路口节点01</li>
-        <li>中山北路路口节点01</li>
-        <li>中山北路路口节点01</li>
-        <li>中山北路路口节点01</li>
-        <li>中山北路路口节点01</li>
+        <li v-for="(item,index) in childData" :key="index" :title="item.dev_name">{{item.dev_name}}</li>
       </ul>
     </div>
     <div class="nav">
       <ul class="menu">
-        <li v-for="(item,index) in showData" :key="index" class="node" :title="item.name">{{item.name}}</li>
+        <li v-for="(item,index) in showData" :key="index" class="node" :title="item.name" :class="{'node-active':index===organize_show_selected}" @click="navMenuSelect(item,index)">{{item.name}}</li>
       </ul>
       <div class="btn">
         <div class="prev" @click="changePage(-1)"></div>
@@ -23,12 +19,14 @@
 
 <script>
 export default {
-  props: { data: Array },
+  props: { data: Array, child: Array },
   data() {
     return {
       page: 1,
       rows: 3,
-      showData: []
+      showData: [],
+      organize_show_selected: 0,
+      childData: []
     };
   },
   methods: {
@@ -40,6 +38,7 @@ export default {
           : (p + page) * this.rows >= this.data.length
             ? Math.ceil(this.data.length / this.rows)
             : p + page;
+
       this.loadData();
     },
     loadData() {
@@ -52,11 +51,26 @@ export default {
           this.showData.push(item);
         }
       });
+    },
+    navMenuSelect(menu, index) {
+      this.$store.commit("setOriganizeShow", menu);
+      this.organize_show_selected = index;
+      this.$http
+        .post("Ma_zong/crossingBox", {
+          o_id: menu.o_id
+        })
+        .then(res => {
+          let data = res.data;
+          this.childData = data.data;
+        });
     }
   },
   watch: {
-    data() {
+    data(value) {
       this.loadData();
+    },
+    child(value) {
+      this.childData = value;
     }
   }
 };
@@ -79,6 +93,7 @@ export default {
         list-style: none;
         color: #67c7eb;
         padding: 0 10px;
+        text-align: center;
         &:before {
           display: block;
           content: "正";

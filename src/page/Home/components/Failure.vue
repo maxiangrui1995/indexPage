@@ -2,37 +2,33 @@
   <div class="wrapper">
     <div class="title hightlight">故障原因</div>
     <Carousel radius-dot arrow='never' v-model="selectIndex" :style="{width:'479px',height:'615px'}" class="my-carousel">
-      <!-- <CarouselItem :name="0">
-        <div class="box">
+      <CarouselItem v-for="item in carouselItemCounts" :key="item" :name="item">
+        <div class="box" v-for="item2 in carouselItemArray[item]" :key="item2">
           <div class="body">
-            <div class="img"></div>
+            <div class="img">
+              <!--  {{data[3*(item-1)+item2-1].fault_img_url}} -->
+              <img :src="'http://127.0.0.1/znyw3.0/PHP/public'+data[3*(item-1)+item2-1].fault_img_url" alt="路口图片">
+            </div>
             <div class="info">
               <div class="item">
-                中山东路
-                <div class="msg">35m</div>
+                {{data[3*(item-1)+item2-1].crossing_name}}
+                <div class="msg"></div>
               </div>
               <div class="item">
-                <Rate :value="5"></Rate>
-                <div class="msg">40分钟</div>
+                告警等级
+                <div class="msg">{{data[3*(item-1)+item2-1].level}}</div>
               </div>
               <div class="item">
-                维修状态
-                <div class="msg ok">已接单</div>
+                派发状态
+                <div class="msg ok">{{dispatch[data[3*(item-1)+item2-1].is_dispatch]}}</div>
               </div>
             </div>
           </div>
           <div class="footer">
             故障原因：
-            <span>线路故障或供电故障</span>
+            <span>{{data[3*(item-1)+item2-1].memo}}</span>
           </div>
         </div>
-      </CarouselItem>
-      <CarouselItem :name="1">
-      </CarouselItem>
-      <CarouselItem :name="2">
-      </CarouselItem> -->
-      <CarouselItem v-for="item in carouselItemCounts" :key="item" :name="item">
-        asdasd
       </CarouselItem>
     </Carousel>
   </div>
@@ -44,13 +40,41 @@ export default {
     data: Array
   },
   data() {
-    return { selectIndex: 0, carouselItemCounts: 0 };
+    return {
+      // 当前选中的下标
+      selectIndex: 0,
+      // 走马灯个数
+      carouselItemCounts: 0,
+      // 走马灯里面的item个数
+      carouselItemArray: {},
+      // 派发状态
+      dispatch: {
+        "0": "未派发",
+        "1": "已手动派发",
+        "2": "已自动派发"
+      }
+    };
+  },
+  mounted() {},
+  computed: {
+    msgFailure() {
+      return this.$store.state.msgFailure;
+    }
   },
   watch: {
-    data() {
-      let count = Math.ceil(this.data.length / 3);
+    data(data) {
+      let count = Math.ceil(data.length / 3);
       this.carouselItemCounts = count;
-      console.log(count);
+      for (let i = 0; i < count; i++) {
+        this.carouselItemArray[i + 1] =
+          data.length - 3 * i > 3 ? 3 : data.length - 3 * i;
+      }
+    },
+    msgFailure(value) {
+      this.data.unshift(value);
+      if (this.data.length > 9) {
+        this.data.pop();
+      }
     }
   }
 };
@@ -78,6 +102,8 @@ export default {
   }
 }
 .box {
+  padding: 20px 0 14px 0;
+  border-bottom: 2px solid fade(#6b6767, 20%);
   .body {
     width: 100%;
     height: 110px;
@@ -85,10 +111,19 @@ export default {
     .img {
       display: table-cell;
       width: 180px;
-      height: 110px;
+      vertical-align: top;
+      background: rgba(0, 0, 0, 0.3);
+      position: relative;
+      overflow: hidden;
+      img {
+        width: 180px;
+        position: absolute;
+        left: 0;
+      }
     }
     .info {
       display: table-cell;
+      padding-left: 10px;
       .item {
         height: 30px;
         line-height: 30px;
@@ -98,7 +133,7 @@ export default {
         .msg {
           position: absolute;
           top: 0;
-          right: 10px;
+          right: 20px;
           color: #898c96;
         }
         .ok {
@@ -110,6 +145,7 @@ export default {
   .footer {
     color: #898c96;
     font-size: 1.28em;
+    margin-top: 10px;
     span {
       color: #ffffff;
     }
@@ -117,6 +153,9 @@ export default {
 }
 </style>
 <style>
+.ivu-carousel-item > .box:last-child {
+  border: none;
+}
 .my-carousel .ivu-carousel-dots li button.radius {
   width: 14px;
   height: 14px;

@@ -2,42 +2,35 @@
   <div class="wrapper">
     <div class="wrapper-bg"></div>
     <div class="wrapper-bg"></div>
-    <div class="msg-default" v-show="msgDefault">一些提示信息</div>
-    <transition name="msg-head">
-      <div class="msg-head" v-show="msgHead">
-        <div class="item">
-          维修单位：
-          <span>南京盾华智慧交通</span>
-        </div>
-        <div class="item">
-          维修状态：
-          <span>已接单</span>
-        </div>
+
+    <div class="msg-tip" v-show="msgTip">警告！</div>
+
+    <transition name="msg-crossing">
+      <div class="msg-crossing" v-show="msgCrossing">
+        <div class="info">{{nowShowData.crossing_name}}</div>
       </div>
     </transition>
-    <transition name="msg-type">
-      <div class="msg-type" v-show="msgType">
-        <div class="info">{{nowShowData.crossing_name}} {{relation.fault_type[nowShowData.fault_type]}}</div>
-      </div>
-    </transition>
+
     <transition name="msg-content">
       <div class="msg-content" v-show="msgContent">
         <div class="title">{{nowShowData.memo}}</div>
       </div>
     </transition>
-    <transition name="msg-grade">
-      <div class="msg-grade" v-show="msgGrade">
+
+    <transition name="msg-type">
+      <div class="msg-type" v-show="msgType">
         <div class="title">{{relation.message_type[nowShowData.message_type]}}</div>
         <div class="info">
-          地点：
-          <span>{{nowShowData.crossing_name}}</span>
+          等级：
+          <span>{{nowShowData.level}}</span>
         </div>
         <div class="info">
           原因：
-          <span>市政停电检修</span>
+          <span>{{relation.fault_type[nowShowData.fault_type]}}</span>
         </div>
       </div>
     </transition>
+
     <transition name="msg-loading">
       <div class="msg-loading" v-show="msgLoading">
         <div class="modal-wrapper">
@@ -45,8 +38,7 @@
             <canvas ref="canvas_loading" width="140" height="140"></canvas>
           </div>
           <div class="info">
-            <p>正在自动修复中</p>
-            <p>请稍后...</p>
+            {{msgLoadingtitle}}
           </div>
         </div>
       </div>
@@ -95,17 +87,18 @@ export default {
       // 字段关系
       relation: relation,
       // 动画
-      msgHead: false,
-      msgType: false,
+      msgTip: false,
+      msgCrossing: false,
       msgContent: false,
-      msgGrade: false,
+      msgType: false,
       msgLoading: false,
-      // 过渡状态
-      msgDefault: true,
+      msgLoadingtitle: "",
       // 实时请求的数据
       featchData: [],
       // 当前展示的数据
-      nowShowData: {}
+      nowShowData: {},
+      // 当前消息类型
+      genre: "repair"
     };
   },
   methods: {
@@ -189,30 +182,70 @@ export default {
     // 定义线程
     lwp() {
       let data = this.data;
-      //
       if (data.length) {
-        this.nowShowData = this.data[0];
-        setTimeout(() => {
-          this.msgType = !this.msgType;
-          this.msgContent = !this.msgContent;
-          this.msgGrade = !this.msgGrade;
-          this.msgDefault = !this.msgDefault;
-          setTimeout(() => {
-            this.msgType = !this.msgType;
-            this.msgContent = !this.msgContent;
-            this.msgGrade = !this.msgGrade;
-          }, 4000);
-          setTimeout(() => {
-            this.msgDefault = !this.msgDefault;
-            this.data.shift();
-          }, 6600);
-        }, 2000);
+        if (data[0].message_type == "2" || data[0].message_type == "3") {
+          this.repairAnimate();
+        } else {
+          this.failureAnimate();
+        }
       } else {
         if (this.featchData.length) {
           this.data.push(...this.featchData);
           this.featchData = [];
         }
       }
+    },
+    // 故障报警动画
+    failureAnimate() {
+      this.msgTip = !this.msgTip;
+      setTimeout(() => {
+        this.nowShowData = this.data[0];
+        this.msgTip = !this.msgTip;
+        this.msgCrossing = !this.msgCrossing;
+        setTimeout(() => {
+          this.msgType = !this.msgType;
+          setTimeout(() => {
+            this.msgContent = !this.msgContent;
+            setTimeout(() => {
+              this.msgCrossing = !this.msgCrossing;
+              this.msgType = !this.msgType;
+              this.msgContent = !this.msgContent;
+              setTimeout(() => {
+                this.$store.commit("setMsgFailure", this.data[0]);
+                this.data.shift();
+              }, 2600);
+            }, 3500);
+          }, 1000);
+        }, 1000);
+      }, 3700);
+    },
+    // 自动修复动画
+    repairAnimate() {
+      setTimeout(() => {
+        this.nowShowData = this.data[0];
+        this.msgLoadingtitle = "正在自动修复中请稍后...";
+        this.loading_fetch = 0;
+        this.msgCrossing = !this.msgCrossing;
+        setTimeout(() => {
+          this.msgType = !this.msgType;
+          setTimeout(() => {
+            this.msgLoading = !this.msgLoading;
+            setTimeout(() => {
+              this.loading_fetch = 100;
+              setTimeout(() => {
+                this.msgLoadingtitle = "修复成功";
+                this.$store.commit("setMsgRequire", this.data[0]);
+                setTimeout(() => {
+                  this.msgCrossing = !this.msgCrossing;
+                  this.msgType = !this.msgType;
+                  this.msgLoading = !this.msgLoading;
+                  this.data.shift();
+                }, 1000);
+              }, 1300);
+            }, 500);
+          }, 1000);
+        }, 1000);
+      }, 3500);
     }
   },
   created() {
@@ -248,19 +281,34 @@ export default {
     transform: rotateZ(-360deg);
   }
 }
-// 动画-head
-@keyframes anim-msg-head {
+@keyframes anim-msg-tip {
   0% {
-    top: 0;
-    opacity: 0;
+    opacity: 1;
+  }
+  80% {
+    opacity: 0.5;
   }
   100% {
-    top: 50px;
     opacity: 1;
   }
 }
-// 动画-type
-@keyframes anim-msg-type {
+.msg-tip {
+  width: 342px;
+  height: 45px;
+  line-height: 45px;
+  display: inline-block;
+  position: absolute;
+  color: #dc7e1a;
+  text-align: center;
+  background: url("~@/assets/4_2.png");
+  top: 50px;
+  left: 50%;
+  transform: translateX(-50%);
+  animation: anim-msg-tip 2s ease-in infinite;
+  animation-fill-mode: both;
+}
+
+@keyframes anim-msg-crossing {
   0% {
     left: 0;
     opacity: 0;
@@ -270,13 +318,25 @@ export default {
     opacity: 1;
   }
 }
-.msg-type-enter-active {
-  animation: anim-msg-type 1.5s;
+.msg-crossing-enter-active {
+  animation: anim-msg-crossing 1.5s;
 }
-.msg-type-leave-active {
-  animation: anim-msg-type 0.5s reverse;
+.msg-crossing-leave-active {
+  animation: anim-msg-crossing 0.5s reverse;
 }
-// 动画-content
+.msg-crossing {
+  width: 339px;
+  height: 85px;
+  background: url("~@/assets/modal02.png");
+  color: #cda952;
+  position: absolute;
+  top: 121px;
+  left: 104px;
+  .info {
+    margin-top: 30px;
+    text-indent: 30px;
+  }
+}
 @keyframes anim-msg-content {
   0% {
     opacity: 0;
@@ -314,8 +374,22 @@ export default {
 .msg-content-leave-active {
   animation: anim-msg-content-leave 2.6s linear;
 }
-// 动画-grade
-@keyframes anim-msg-grade {
+.msg-content {
+  width: 393px;
+  height: 126px;
+  background: url("~@/assets/modal01.png");
+  color: #fff;
+  padding: 30px 0;
+  position: absolute;
+  top: 390px;
+  left: 140px;
+  .title {
+    height: 30px;
+    line-height: 30px;
+    padding: 0 30px;
+  }
+}
+@keyframes anim-msg-type {
   0% {
     opacity: 0;
     right: 0;
@@ -325,31 +399,80 @@ export default {
     right: 145px;
   }
 }
-.msg-grade-enter-active {
-  animation: anim-msg-grade 1.5s;
+.msg-type-enter-active {
+  animation: anim-msg-type 1.5s;
 }
-.msg-grade-leave-active {
-  animation: anim-msg-grade 0.5s reverse;
+.msg-type-leave-active {
+  animation: anim-msg-type 0.5s reverse;
 }
-
-//过渡
-@keyframes anim-msg-default {
+.msg-type {
+  width: 323px;
+  height: 154px;
+  background: url("~@/assets/modal05.png");
+  color: #fff;
+  padding: 30px 0;
+  position: absolute;
+  top: 206px;
+  right: 145px;
+  .title {
+    color: #ff5b5b;
+    font-size: 1.28em;
+    text-indent: 30px;
+  }
+  .info {
+    height: 30px;
+    line-height: 30px;
+    text-indent: 30px;
+    color: #38a9fc;
+    span {
+      color: #fff;
+    }
+  }
+}
+@keyframes anim-msg-loading {
   0% {
-    opacity: 0.4;
+    opacity: 0;
+    bottom: 0;
   }
   100% {
     opacity: 1;
+    bottom: 70px;
   }
 }
-.msg-default {
-  display: inline-block;
+.msg-loading-enter-active {
+  animation: anim-msg-loading 1.5s;
+}
+.msg-loading-leave-active {
+  animation: anim-msg-loading 0.5s reverse;
+}
+.msg-loading {
+  width: 393px;
+  height: 185px;
+  background: url("~@/assets/modal04.png");
+  color: #fff;
+  padding: 30px 10px;
   position: absolute;
-  color: #ff5b5b;
-  top: 50px;
-  left: 50%;
-  transform: translateX(-50%);
-  animation: anim-msg-default 1.5s linear infinite;
-  animation-fill-mode: both;
+  left: 125px;
+  bottom: 70px;
+  .modal-wrapper {
+    display: table;
+    .view {
+      display: table-cell;
+      width: 160px;
+      height: 140px;
+      text-align: center;
+      vertical-align: bottom;
+    }
+    .info {
+      display: table-cell;
+      vertical-align: top;
+      width: 210px;
+      height: 140px;
+      text-align: center;
+      font-size: 1.38em;
+      padding: 30px 15px;
+    }
+  }
 }
 
 .wrapper {
@@ -392,106 +515,6 @@ export default {
       transform-origin: 500px 340px;
       background-position: 185px -48px;
       animation: anim-circle-anticlockwise 60s linear infinite;
-    }
-  }
-  .msg-head {
-    width: 393px;
-    height: 126px;
-    background: url("~@/assets/modal01.png");
-    position: absolute;
-    top: 50px;
-    left: 245px;
-    color: #38a9fc;
-    padding: 30px 0;
-    animation: msg-head 1.5s;
-    .item {
-      height: 30px;
-      line-height: 30px;
-      text-indent: 30px;
-      span {
-        color: #fff;
-      }
-    }
-  }
-  .msg-type {
-    width: 339px;
-    height: 85px;
-    background: url("~@/assets/modal02.png");
-    color: #cda952;
-    position: absolute;
-    top: 121px;
-    left: 104px;
-    .info {
-      margin-top: 30px;
-      text-indent: 30px;
-    }
-  }
-  .msg-content {
-    width: 393px;
-    height: 126px;
-    background: url("~@/assets/modal01.png");
-    color: #fff;
-    padding: 30px 0;
-    position: absolute;
-    top: 390px;
-    left: 140px;
-    .title {
-      height: 30px;
-      line-height: 30px;
-      padding: 0 30px;
-    }
-  }
-  .msg-grade {
-    width: 323px;
-    height: 154px;
-    background: url("~@/assets/modal05.png");
-    color: #fff;
-    padding: 30px 0;
-    position: absolute;
-    top: 206px;
-    right: 145px;
-    .title {
-      color: #ff5b5b;
-      font-size: 1.28em;
-      text-indent: 30px;
-    }
-    .info {
-      height: 30px;
-      line-height: 30px;
-      text-indent: 30px;
-      color: #38a9fc;
-      span {
-        color: #fff;
-      }
-    }
-  }
-  .msg-loading {
-    width: 393px;
-    height: 185px;
-    background: url("~@/assets/modal04.png");
-    color: #fff;
-    padding: 30px 10px;
-    position: absolute;
-    left: 125px;
-    bottom: 35px;
-    .modal-wrapper {
-      display: table;
-      .view {
-        display: table-cell;
-        width: 160px;
-        height: 140px;
-        text-align: center;
-        vertical-align: bottom;
-      }
-      .info {
-        display: table-cell;
-        vertical-align: top;
-        width: 210px;
-        height: 140px;
-        text-align: center;
-        font-size: 1.38em;
-        padding: 30px 0;
-      }
     }
   }
 }
