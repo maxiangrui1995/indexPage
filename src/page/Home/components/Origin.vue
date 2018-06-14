@@ -7,25 +7,33 @@
     </div>
     <div class="nav">
       <ul class="menu">
-        <li v-for="(item,index) in showData" :key="index" class="node" :title="item.name" :class="{'node-active':index===organize_show_selected}" @click="navMenuSelect(item,index)">{{item.name}}</li>
+        <YNode :active="true" v-for="(item,index) in showData" :key="index" :data="item" :selected="organize_show_selected" @on-click="navMenuSelect">
+          <span :title="item.name">{{item.name}}</span>
+        </YNode>
       </ul>
       <div class="btn">
-        <div class="prev" @click="changePage(-1)"></div>
-        <div class="next" @click="changePage(1)"></div>
+        <div class="prev" @click="changePage(-1)" title="上一页">
+          <Icon type="chevron-left" :size="12"></Icon>
+        </div>
+        <div class="next" @click="changePage(1)" title="下一页">
+          <Icon type="chevron-right" :size="12"></Icon>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import YNode from "@/components/Node";
 export default {
+  components: { YNode },
   props: { data: Array, child: Array },
   data() {
     return {
       page: 1,
       rows: 3,
       showData: [],
-      organize_show_selected: 0,
+      organize_show_selected: {},
       childData: []
     };
   },
@@ -52,21 +60,23 @@ export default {
         }
       });
     },
-    navMenuSelect(menu, index) {
-      this.$store.commit("setOriganizeShow", menu);
-      this.organize_show_selected = index;
+    navMenuSelect(data) {
+      this.$store.commit("setOriganizeShow", data);
+      this.organize_show_selected = data.o_id;
       this.$http
         .post("Ma_zong/crossingBox", {
-          o_id: menu.o_id
+          o_id: data.o_id
         })
         .then(res => {
           let data = res.data;
           this.childData = data.data;
+          this.$store.commit("setCrossingBox", data.data);
         });
     }
   },
   watch: {
     data(value) {
+      this.organize_show_selected = value[0].o_id;
       this.loadData();
     },
     child(value) {
@@ -113,7 +123,6 @@ export default {
     position: relative;
     .menu {
       width: 800px;
-      height: 30px;
       overflow: hidden;
       li {
         float: left;
@@ -132,13 +141,14 @@ export default {
         width: 30px;
         height: 30px;
         cursor: pointer;
+        border-radius: 50%;
+        background: #39496a;
+        vertical-align: top;
+        text-align: center;
       }
-      .prev {
-        background: url("~@/assets/leftbtn.png");
-        margin-right: 9px;
-      }
-      .next {
-        background: url("~@/assets/rightbtn.png");
+      .ivu-icon {
+        color: #fff;
+        line-height: 30px;
       }
     }
   }

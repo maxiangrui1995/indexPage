@@ -5,6 +5,7 @@
       <Dropdown @on-click="dropDownItemSelect">
         <a href="javascript:void(0)">
           {{dropMenuSelected.dev_name}}
+
           <Icon type="arrow-down-b"></Icon>
         </a>
         <DropdownMenu slot="list">
@@ -16,7 +17,10 @@
       <div class="header"></div>
       <div class="body">
         <div class="item">
-          <div class="node">{{organize_show.name}}</div>
+          <!-- <div class="node">{{organize_show.name}}</div> -->
+          <YNode>
+            <span :title="organize_show.name">{{organize_show.name}}</span>
+          </YNode>
         </div>
         <div class="item">
           <div class="info">设备厂家：{{devData.sdk}}</div>
@@ -30,7 +34,10 @@
 </template>
 
 <script>
+import YNode from "@/components/Node";
+
 export default {
+  components: { YNode },
   props: {
     data: Object
   },
@@ -86,7 +93,7 @@ export default {
   height: 390px;
   background: url("~@/assets/2.png");
   position: relative;
-  .title {
+  > .title {
     width: 100px;
     height: 30px;
     line-height: 30px;
@@ -95,7 +102,7 @@ export default {
     top: -6px;
     left: 110px;
   }
-  .selectbox {
+  > .selectbox {
     position: absolute;
     left: 235px;
     top: 10px;
@@ -106,7 +113,7 @@ export default {
       }
     }
   }
-  .box {
+  > .box {
     width: 430px;
     height: 335px;
     position: absolute;
@@ -123,6 +130,7 @@ export default {
       height: 75px;
       .item {
         display: table-cell;
+        position: relative;
       }
       .item:nth-child(1) {
         width: 150px;

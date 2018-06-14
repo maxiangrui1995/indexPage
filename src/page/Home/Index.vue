@@ -53,9 +53,9 @@ export default {
   data() {
     return {
       // 在线率
-      online_radio: { off_radio: 0, on_radio: 0 },
+      online_radio: {},
       // 节点数
-      node_number: { sum: 0, online: 0 },
+      node_number: {},
       // 设备
       count_assets: [],
       // 组织机构
@@ -65,7 +65,7 @@ export default {
       // 视频
       play_video: {},
       // 自动修复
-      fault_repair: { artificial: 0, auto_radio: 0, automatic: 0 },
+      fault_repair: {},
       // 中心控制数据
       control_center: [],
       // 故障原因
@@ -74,49 +74,42 @@ export default {
   },
   methods: {
     loadData() {
-      this.$http.post("Ma_zong/indexAllData").then(res => {
-        let data = res.data.data;
-        console.log(data);
-        if (!data) {
-          return this.$Notice.error({
-            desc: "服务器请求错误！"
-          });
-        }
-        // 在线率
-        let online_radio = data.online_radio;
-        this.online_radio.off_radio = online_radio.off_radio;
-        this.online_radio.on_radio = online_radio.on_radio;
-        // 节点数
-        let node_number = data.node_number;
-        this.node_number.sum = node_number.sum;
-        this.node_number.online = node_number.online;
-        // 设备
-        let count_assets = data.count_assets;
-        this.count_assets = count_assets;
-        // 组织机构
-        let organize_show = data.organize_show;
-        this.organize_show = organize_show;
-        // 第一个组织机构下的机箱数据
-        let crossing_box = data.crossing_box;
-        this.crossing_box = crossing_box;
-        // 视频
-        let play_video = data.play_video[0] || {};
-        this.play_video = play_video;
-        // 自动修复
-        let fault_repair = data.fault_repair;
-        this.fault_repair.artificial = ~~fault_repair.artificial;
-        this.fault_repair.auto_radio = ~~fault_repair.auto_radio;
-        this.fault_repair.automatic = ~~fault_repair.automatic;
-        // 中心控制数据
-        let control_center = data.control_center;
-        this.control_center = control_center;
-        // 故障原因
-        let current_fault = data.current_fault;
-        this.current_fault = current_fault;
+      this.$http
+        .post("Ma_zong/indexAllData")
+        .then(res => {
+          let data = res.data.data;
+          if (data) {
+            console.log("AllData:", data);
 
-        this.$store.commit("setOriganizeShow", organize_show[0]);
-        this.$store.commit("setCrossingBox", crossing_box);
-      });
+            // 在线率
+            this.online_radio = data.online_radio;
+            // 节点数
+            this.node_number = data.node_number;
+            // 设备
+            this.count_assets = data.count_assets;
+            // 组织机构
+            this.organize_show = data.organize_show;
+            // 第一个组织机构下的机箱数据
+            this.crossing_box = data.crossing_box;
+            // 视频
+            this.play_video = data.play_video[0] || {};
+            // 自动修复
+            this.fault_repair = data.fault_repair;
+            // 中心控制数据
+            this.control_center = data.control_center;
+            // 故障原因
+            this.current_fault = data.current_fault;
+
+            this.$store.commit("setLogin", true);
+            this.$store.commit("setOriganizeShow", data.organize_show[0]);
+            this.$store.commit("setCrossingBox", data.crossing_box);
+          }
+        })
+        .catch(res => {
+          this.$Notice.error({
+            desc: res.response.data
+          });
+        });
     }
   },
   created() {

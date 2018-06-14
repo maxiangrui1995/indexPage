@@ -28,13 +28,15 @@ export default {
   data() {
     return {
       sum: 0,
-      online: 0
+      online: 0,
+      //
+      SUM: 0,
+      ONLINE: 0
     };
   },
   methods: {
     animatedNumber(finalNum, originNum, type) {
-      let step = Math.ceil(finalNum / (1500 / 50)); //递增步数
-      step = finalNum < originNum ? -step : step;
+      let step = Math.ceil((finalNum - originNum) / (1500 / 50)); //递增步数
       let timer = setInterval(() => {
         originNum += step;
         if (
@@ -45,15 +47,31 @@ export default {
           clearInterval(timer);
         }
         this[type] = originNum;
-      }, 50);
+      }, 25);
+    }
+  },
+  computed: {
+    isLogin() {
+      return this.$store.state.isLogin;
     }
   },
   watch: {
-    "data.sum"(newValue) {
+    data(value) {
+      this.SUM = value.sum;
+      this.ONLINE = value.online;
+    },
+    SUM(newValue) {
       this.animatedNumber(newValue, this.sum, "sum");
     },
-    "data.online"(newValue) {
+    ONLINE(newValue) {
       this.animatedNumber(newValue, this.online, "online");
+    },
+    isLogin() {
+      // Todo
+      let timer = setInterval(() => {
+        this.SUM++;
+        this.ONLINE++;
+      }, 5000);
     }
   }
 };

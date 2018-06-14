@@ -25,19 +25,21 @@ export default {
   data() {
     return {
       on_radio: 0,
-      off_radio: 0
+      off_radio: 0,
+      //
+      ON: 0,
+      OFF: 0
     };
   },
   methods: {
-    drawView(elem, finalNum) {
+    drawView(elem, finalNum, originNum) {
       let canvas = elem;
       let ctx = canvas.getContext("2d");
       let width = canvas.width;
       let height = canvas.height;
 
       let count = 0;
-      let step = Math.ceil(finalNum / (1500 / 50));
-      step = count < finalNum ? step : -step;
+      let step = (finalNum - originNum) / (1500 / 50);
       const render = () => {
         ctx.clearRect(0, 0, width, height);
         ctx.lineWidth = 2;
@@ -54,6 +56,8 @@ export default {
         grd.addColorStop(1, "#72d9f8");
         ctx.fillStyle = grd;
         let n = pre === 1 ? 20 : pre * 20;
+        console.log(n);
+
         for (let i = 0; i < n; i++) {
           let w = (width - 4) / 20 - 4;
           let c = Math.floor(n);
@@ -76,11 +80,10 @@ export default {
           clearInterval(timer);
         }
         render();
-      }, 50);
+      }, 25);
     },
     animatedNumber(finalNum, originNum, type) {
-      let step = Math.ceil(finalNum / (1500 / 50)); //递增步数
-      step = finalNum < originNum ? -step : step;
+      let step = (finalNum - originNum) / (1500 / 50); //递增步数
       let timer = setInterval(() => {
         originNum += step;
         if (
@@ -90,20 +93,90 @@ export default {
           originNum = finalNum;
           clearInterval(timer);
         }
-        this[type] = originNum;
-      }, 50);
+        this[type] = Number(originNum.toFixed(2));
+      }, 25);
+    },
+    animatedView(canvas, finalNum, originNum, chart) {
+      let ctx = canvas.getContext("2d");
+      let width = canvas.width;
+      let height = canvas.height;
+
+      let step = (finalNum - originNum) / (1500 / 50); //递增步数，允许浮点数
+      let render = () => {
+        ctx.clearRect(0, 0, width, height);
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        // 外层边框
+        ctx.strokeStyle = "#08478f";
+        ctx.rect(0, 0, width, height);
+        ctx.stroke();
+        // 内层
+        ctx.beginPath();
+        let pre = originNum / 100;
+        let grd = ctx.createLinearGradient(0, 0, width * pre, height);
+        grd.addColorStop(0, "#08478f");
+        grd.addColorStop(1, "#72d9f8");
+        ctx.fillStyle = grd;
+        let n = pre === 1 ? 20 : pre * 20;
+        for (let i = 0; i < n; i++) {
+          let w = (width - 4) / 20 - 4;
+          let c = Math.floor(n);
+          if (i < c) {
+            ctx.fillRect(4 + (w + 4) * i, 4, w, height - 8);
+          } else {
+            ctx.fillRect(4 + (w + 4) * i, 4, w * (n - c), height - 8);
+          }
+        }
+        ctx.fill();
+      };
+      let timer = setInterval(() => {
+        originNum += step;
+        if (
+          (step > 0 && originNum >= finalNum) ||
+          (step < 0 && originNum <= finalNum)
+        ) {
+          originNum = finalNum;
+          clearInterval(timer);
+        }
+        this[chart] = Number(originNum.toFixed(2));
+        render();
+      }, 25);
+    }
+  },
+  computed: {
+    isLogin() {
+      return this.$store.state.isLogin;
     }
   },
   watch: {
-    "data.on_radio"(value) {
-      let newValue = value.toFixed(2);
-      this.drawView(this.$refs.canvas_online, newValue);
-      this.animatedNumber(newValue, this.on_radio, "on_radio");
+    data(value) {
+      this.ON = value.on_radio;
+      this.OFF = value.off_radio;
     },
-    "data.off_radio"(value) {
-      let newValue = value.toFixed(2);
-      this.drawView(this.$refs.canvas_offline, newValue);
-      this.animatedNumber(newValue, this.off_radio, "off_radio");
+    ON(newValue) {
+      let Value = Number(newValue.toFixed(2));
+      this.animatedView(
+        this.$refs.canvas_online,
+        Value,
+        this.on_radio,
+        "on_radio"
+      );
+    },
+    OFF(newValue) {
+      let Value = Number(newValue.toFixed(2));
+      this.animatedView(
+        this.$refs.canvas_offline,
+        Value,
+        this.off_radio,
+        "off_radio"
+      );
+    },
+    isLogin() {
+      // Todo
+      setInterval(() => {
+        this.ON = 78.22;
+        this.OFF = 21.78;
+      }, 5000);
     }
   }
 };
