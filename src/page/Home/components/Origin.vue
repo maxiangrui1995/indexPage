@@ -1,9 +1,11 @@
 <template>
   <div class="wrapper">
     <div class="content">
-      <ul class="menu">
-        <li v-for="(item,index) in childData" :key="index" :title="item.dev_name">{{item.dev_name}}</li>
-      </ul>
+      <VueScrollbar class="my-scroller">
+        <ul class="menu">
+          <li v-for="(item,index) in childData" :key="index" :title="item.dev_name">{{item.dev_name}}</li>
+        </ul>
+      </VueScrollbar>
     </div>
     <div class="nav">
       <ul class="menu">
@@ -25,8 +27,9 @@
 
 <script>
 import YNode from "@/components/Node";
+import VueScrollbar from "vue2-scrollbar";
 export default {
-  components: { YNode },
+  components: { YNode, VueScrollbar },
   props: { data: Array, child: Array },
   data() {
     return {
@@ -87,6 +90,11 @@ export default {
 </script>
 
 <style scoped lang='less'>
+.my-scroller {
+  width: 100%;
+  height: 82px;
+  background: transparent;
+}
 .wrapper {
   width: 922px;
   height: 204px;
@@ -99,6 +107,7 @@ export default {
     padding-top: 26px;
     .menu {
       li {
+        height: 94px;
         float: left;
         list-style: none;
         color: #67c7eb;
@@ -115,6 +124,11 @@ export default {
           text-align: center;
           font-size: 1.28em;
         }
+      }
+      &:after {
+        content: "";
+        display: block;
+        clear: both;
       }
     }
   }

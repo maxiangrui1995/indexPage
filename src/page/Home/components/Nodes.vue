@@ -67,10 +67,14 @@ export default {
       this.animatedNumber(newValue, this.online, "online");
     },
     isLogin() {
-      // Todo
-      let timer = setInterval(() => {
-        this.SUM++;
-        this.ONLINE++;
+      setInterval(() => {
+        this.$http.post("Ma_zong/nodeNumber").then(res => {
+          console.log(res.data);
+          if (res.data) {
+            this.SUM = res.data.data.sum;
+            this.ONLINE = res.data.data.online;
+          }
+        });
       }, 5000);
     }
   }

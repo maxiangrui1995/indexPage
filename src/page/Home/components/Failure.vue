@@ -16,7 +16,10 @@
               </div>
               <div class="item">
                 告警等级
-                <div class="msg">{{data[3*(item-1)+item2-1].level}}</div>
+                <div class="msg">
+                  <!-- {{data[3*(item-1)+item2-1].level}} -->
+                  <YGrade :num="data[3*(item-1)+item2-1].level" />
+                </div>
               </div>
               <div class="item">
                 派发状态
@@ -35,7 +38,11 @@
 </template>
 
 <script>
+import YGrade from "@/components/Grade";
 export default {
+  components: {
+    YGrade
+  },
   props: {
     data: Array
   },
@@ -123,28 +130,31 @@ export default {
     }
     .info {
       display: table-cell;
-      padding-left: 10px;
+      text-indent: 10px;
       .item {
         height: 30px;
         line-height: 30px;
-        color: #fff;
-        font-size: 1.28em;
+        color: #f1f1f1;
         position: relative;
+        font-size: 1.08em;
         .msg {
           position: absolute;
-          top: 0;
+          top: 4px;
           right: 20px;
-          color: #898c96;
         }
         .ok {
           color: #67c7eb;
         }
       }
+      .item:first-child {
+        font-size: 1.28em;
+        color: #fff;
+      }
     }
   }
   .footer {
     color: #898c96;
-    font-size: 1.28em;
+    font-size: 1.08em;
     margin-top: 10px;
     span {
       color: #ffffff;

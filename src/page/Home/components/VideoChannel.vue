@@ -14,7 +14,15 @@
       </Dropdown>
     </div>
     <div class="box">
-      <div class="header"></div>
+      <div class="header" :title="devData.address">
+        <object type='application/x-vlc-plugin' pluginspage="http://www.videolan.org/" id='vlc' events='false' width="424" height="253">
+          <param name='mrl' value='rtsp://admin:admin123456@192.168.0.198' />
+          <param name='volume' value='50' />
+          <param name='autoplay' value='true' />
+          <param name='loop' value='false' />
+          <param name='fullscreen' value='false' />
+        </object>
+      </div>
       <div class="body">
         <div class="item">
           <!-- <div class="node">{{organize_show.name}}</div> -->
@@ -123,6 +131,7 @@ export default {
       width: 430px;
       height: 260px;
       background: url("~@/assets/video.png");
+      padding: 3px;
     }
     .body {
       display: table;

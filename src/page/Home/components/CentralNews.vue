@@ -43,6 +43,12 @@
         </div>
       </div>
     </transition>
+
+    <transition name="msg-plain">
+      <div class="msg-plain" v-show="msgPlain">
+        <span>{{msgPlainText}}</span>
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -93,6 +99,8 @@ export default {
       msgType: false,
       msgLoading: false,
       msgLoadingtitle: "",
+      msgPlain: false,
+      msgPlainText: "",
       // 实时请求的数据
       featchData: [],
       // 当前展示的数据
@@ -170,7 +178,7 @@ export default {
       }, 50);
     },
     // 实时请求新数据 5s
-    loadData() {
+    loopFetchData() {
       setInterval(() => {
         this.$http.post("Ma_zong/controlCenter").then(res => {
           if (res.data.status === "1") {
@@ -192,6 +200,8 @@ export default {
         if (this.featchData.length) {
           this.data.push(...this.featchData);
           this.featchData = [];
+        }else{
+          this.plainAnnimate();
         }
       }
     },
@@ -246,10 +256,31 @@ export default {
           }, 1000);
         }, 1000);
       }, 3500);
+    },
+    // 普通状态动画
+    plainAnnimate() {
+      if (this.data.length) {
+        return;
+      }
+      let render = () => {
+        let textArray = ["设备巡检...", "视频检测...", "巡检修复..."];
+        let index = Math.floor(Math.random() * 3);
+        this.msgPlainText = textArray[index];
+        this.msgPlain = !this.msgPlain;
+        setTimeout(() => {
+          this.msgPlain = !this.msgPlain;
+        }, 4000);
+      };
+      render();
+      setInterval(() => {
+        render();
+      }, 8000);
     }
   },
-  created() {
-    this.loadData();
+  computed: {
+    isLogin() {
+      return this.$store.state.isLogin;
+    }
   },
   watch: {
     loading_fetch() {
@@ -257,6 +288,9 @@ export default {
     },
     data(value) {
       this.lwp();
+    },
+    isLogin() {
+      this.loopFetchData();
     }
   }
 };
@@ -474,7 +508,45 @@ export default {
     }
   }
 }
+@keyframes anim-msg-plain {
+  0% {
+    transform: scale(0, 0);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.2);
+  }
+  80% {
+    transform: scale(0.8);
+  }
 
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.msg-plain-enter-active {
+  animation: anim-msg-plain 2s linear;
+}
+.msg-plain-leave-active {
+  animation: anim-msg-plain 2s linear reverse;
+}
+.msg-plain {
+  width: 339px;
+  height: 85px;
+  text-align: center;
+  position: absolute;
+  top: 305px;
+  left: 310px;
+  background: url("~@/assets/modal02.png");
+  span {
+    line-height: 85px;
+    font-size: 1.28em;
+    color: #dc7e1a;
+    display: inline-block;
+  }
+}
 .wrapper {
   width: 934px;
   height: 675px;
