@@ -6,16 +6,16 @@ import iView from "iview";
 import axios from "axios";
 import store from "./store";
 
-// import "@/mock";
+import "@/mock";
 import "iview/dist/styles/iview.css";
 import "vue2-scrollbar/dist/style/vue2-scrollbar.css";
 import "./style/index.less";
 
 
 // dev
-// axios.defaults.baseURL = "/api/";
+axios.defaults.baseURL = "/api/";
 // build
-axios.defaults.baseURL = "../PHP/public/index.php/index";
+// axios.defaults.baseURL = "../PHP/public/index.php/index";
 axios.defaults.headers.post["Content-Type"] =
   "application/x-www-form-urlencoded";
 

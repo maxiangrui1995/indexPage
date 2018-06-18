@@ -69,7 +69,6 @@ export default {
     isLogin() {
       setInterval(() => {
         this.$http.post("Ma_zong/nodeNumber").then(res => {
-          console.log(res.data);
           if (res.data) {
             this.SUM = res.data.data.sum;
             this.ONLINE = res.data.data.online;

@@ -71,6 +71,8 @@ export default {
           o_id: data.o_id
         })
         .then(res => {
+          console.log(res.data);
+          
           let data = res.data;
           this.childData = data.data;
           this.$store.commit("setCrossingBox", data.data);
@@ -107,7 +109,7 @@ export default {
     padding-top: 26px;
     .menu {
       li {
-        height: 94px;
+        height: 88px;
         float: left;
         list-style: none;
         color: #67c7eb;

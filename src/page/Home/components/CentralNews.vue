@@ -181,8 +181,11 @@ export default {
     loopFetchData() {
       setInterval(() => {
         this.$http.post("Ma_zong/controlCenter").then(res => {
-          if (res.data.status === "1") {
+          let data = res.data.data;
+          if (data.length) {
             this.featchData.push(...res.data.data);
+          } else {
+            this.featchData.push(false);
           }
         });
       }, 5000);
@@ -190,18 +193,23 @@ export default {
     // 定义线程
     lwp() {
       let data = this.data;
+
       if (data.length) {
-        if (data[0].message_type == "2" || data[0].message_type == "3") {
-          this.repairAnimate();
+        if (data[0]) {
+          if (data[0].message_type == "2" || data[0].message_type == "3") {
+            this.repairAnimate();
+          } else {
+            this.failureAnimate();
+          }
         } else {
-          this.failureAnimate();
+          this.plainAnnimate();
         }
       } else {
         if (this.featchData.length) {
           this.data.push(...this.featchData);
           this.featchData = [];
-        }else{
-          this.plainAnnimate();
+        } else {
+          this.data.push(false);
         }
       }
     },
@@ -259,22 +267,19 @@ export default {
     },
     // 普通状态动画
     plainAnnimate() {
-      if (this.data.length) {
-        return;
-      }
-      let render = () => {
-        let textArray = ["设备巡检...", "视频检测...", "巡检修复..."];
-        let index = Math.floor(Math.random() * 3);
-        this.msgPlainText = textArray[index];
+      let textArray = ["设备巡检...", "视频检测...", "巡检修复..."];
+      let index = Math.floor(Math.random() * 3);
+      this.msgPlainText = textArray[index];
+
+      setTimeout(() => {
         this.msgPlain = !this.msgPlain;
         setTimeout(() => {
           this.msgPlain = !this.msgPlain;
-        }, 4000);
-      };
-      render();
-      setInterval(() => {
-        render();
-      }, 8000);
+          setTimeout(() => {
+            this.data.shift();
+          }, 3000);
+        }, 3000);
+      }, 1000);
     }
   },
   computed: {
