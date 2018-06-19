@@ -1,31 +1,30 @@
 <template>
-<div class="box">
-  <div class="body">
-    <div class="img">
-      <img :src="'http://127.0.0.1/znyw3.0/PHP/public'+data.fault_img_url" alt="路口图片">
-    </div>
-    <div class="info">
-      <div class="item">
-        {{data.crossing_name}}
-        <div class="msg"></div>
+  <div class="box">
+    <div class="body">
+      <div class="img">
+        <img :src="'http://127.0.0.1/znyw3.0/PHP/public'+data.fault_img_url" alt="路口图片">
       </div>
-      <div class="item">
-        告警等级
-        <div class="msg" :class="levelClass">
+      <div class="info">
+        <div class="item">
+          {{data.crossing_name}}
+          <div class="msg"></div>
+        </div>
+        <div class="item">
+          告警等级
+          <div class="msg" :class="levelClass">
+          </div>
+        </div>
+        <div class="item">
+          派发状态
+          <div class="msg ok">{{dispatch[data.is_dispatch]}}</div>
         </div>
       </div>
-      <div class="item">
-        派发状态
-        <div class="msg ok">{{dispatch[data.is_dispatch]}}</div>
-      </div>
+    </div>
+    <div class="footer">
+      故障原因：
+      <span>{{data.memo}}</span>
     </div>
   </div>
-  <div class="footer">
-    故障原因：
-    <span>{{data.memo}}</span>
-  </div>
-        
-</div>
 </template>
 
 <script>
@@ -42,8 +41,7 @@ export default {
       }
     };
   },
-  created() {
-  },
+  created() {},
   computed: {
     levelClass() {
       let obj = {};

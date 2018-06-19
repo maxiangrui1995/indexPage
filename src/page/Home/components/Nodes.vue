@@ -68,7 +68,7 @@ export default {
     },
     isLogin() {
       setInterval(() => {
-        this.$http.post("Ma_zong/nodeNumber").then(res => {
+        this.$http.post("Ma_zong/nodeNumber", { tag: "njdh" }).then(res => {
           if (res.data) {
             this.SUM = res.data.data.sum;
             this.ONLINE = res.data.data.online;

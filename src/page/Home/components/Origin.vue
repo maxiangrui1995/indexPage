@@ -68,11 +68,12 @@ export default {
       this.organize_show_selected = data.o_id;
       this.$http
         .post("Ma_zong/crossingBox", {
-          o_id: data.o_id
+          o_id: data.o_id,
+          tag: "njdh"
         })
         .then(res => {
           console.log(res.data);
-          
+
           let data = res.data;
           this.childData = data.data;
           this.$store.commit("setCrossingBox", data.data);

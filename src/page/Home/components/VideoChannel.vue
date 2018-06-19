@@ -69,7 +69,8 @@ export default {
     loadData() {
       this.$http
         .post("Ma_zong/playVideo", {
-          dev_code: this.dropMenuSelected.dev_code
+          dev_code: this.dropMenuSelected.dev_code,
+          tag: "njdh"
         })
         .then(res => {
           let data = res.data;

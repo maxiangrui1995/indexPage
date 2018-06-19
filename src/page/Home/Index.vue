@@ -75,7 +75,7 @@ export default {
   methods: {
     loadData() {
       this.$http
-        .post("Ma_zong/indexAllData")
+        .post("Ma_zong/indexAllData", { tag: "njdh" })
         .then(res => {
           let data = res.data.data;
           if (data) {

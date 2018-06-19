@@ -109,7 +109,7 @@ export default {
     },
     isLogin() {
       setInterval(() => {
-        this.$http.post("Ma_zong/onlineRadio").then(res => {
+        this.$http.post("Ma_zong/onlineRadio", { tag: "njdh" }).then(res => {
           if (res.data) {
             this.ON = res.data.data.on_radio;
             this.OFF = res.data.data.off_radio;

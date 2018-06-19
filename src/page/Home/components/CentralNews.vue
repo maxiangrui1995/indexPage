@@ -180,7 +180,7 @@ export default {
     // 实时请求新数据 5s
     loopFetchData() {
       setInterval(() => {
-        this.$http.post("Ma_zong/controlCenter").then(res => {
+        this.$http.post("Ma_zong/controlCenter", { tag: "njdh" }).then(res => {
           let data = res.data.data;
           if (data.length) {
             this.featchData.push(...res.data.data);
@@ -563,34 +563,36 @@ export default {
     overflow: hidden;
     position: absolute;
     &:before {
-      width: 788px;
-      height: 739px;
+      width: 591px;
+      height: 620px;
       display: block;
       content: "";
       background: url("~@/assets/circle.png") no-repeat;
       animation-fill-mode: both;
+      opacity: 0.6;
     }
   }
   &-bg:nth-child(1) {
-    width: 490px;
-    height: 606px;
     top: 34px;
     left: 22px;
+    width: 344px;
     &:before {
-      margin-left: -300px;
-      transform-origin: 313px 342px;
-      background-position: 0 -42px;
+      width: 591px;
+      height: 607px;
+      margin-left: -280px;
+      transform-origin: 291.5px 320.5px;
       animation: anim-circle 60s linear infinite;
     }
   }
   &-bg:nth-child(2) {
-    width: 490px;
-    height: 602px;
     top: 39px;
     right: 27px;
+    width: 344px;
     &:before {
-      transform-origin: 500px 340px;
-      background-position: 185px -48px;
+      width: 591px;
+      height: 602px;
+      margin-left: 76px;
+      transform-origin: 291.5px 320.5px;
       animation: anim-circle-anticlockwise 60s linear infinite;
     }
   }

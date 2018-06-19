@@ -3,8 +3,7 @@
     <div class="title hightlight">故障原因</div>
     <Carousel radius-dot arrow='never' v-model="selectIndex" :style="{width:'479px',height:'615px'}" class="my-carousel">
       <CarouselItem v-for="item in carouselItemCounts" :key="item" :name="item">
-         <YFailure v-for="item2 in carouselItemArray[item]" :key="item2" :data="data[3*(item-1)+item2-1]"/>
-       <!--   -->
+        <YFailure v-for="item2 in carouselItemArray[item]" :key="item2" :data="data[3*(item-1)+item2-1]" />
       </CarouselItem>
     </Carousel>
   </div>
@@ -19,7 +18,7 @@ export default {
   props: {
     data: Array
   },
-  name:"failure",
+  name: "failure",
   data() {
     return {
       // 当前选中的下标
@@ -27,12 +26,10 @@ export default {
       // 走马灯个数
       carouselItemCounts: 0,
       // 走马灯里面的item个数
-      carouselItemArray: {},
-      
+      carouselItemArray: {}
     };
   },
-  created() {
-  },
+  created() {},
   computed: {
     msgFailure() {
       return this.$store.state.msgFailure;
