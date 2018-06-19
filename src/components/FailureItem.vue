@@ -15,8 +15,8 @@
           </div>
         </div>
         <div class="item">
-          派发状态
-          <div class="msg ok">{{dispatch[data.is_dispatch]}}</div>
+          故障时间
+          <div class="msg ok">{{data.create_time}}</div>
         </div>
       </div>
     </div>
@@ -111,7 +111,7 @@ export default {
   height: 22px;
   background: url("~@/assets/g0.png");
 }
-.g2 {
+.g1 {
   width: 72px;
   height: 22px;
   background: url("~@/assets/g1.png");

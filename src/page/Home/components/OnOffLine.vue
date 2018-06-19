@@ -1,14 +1,14 @@
 <template>
   <div class="wrapper">
     <div class="item">
-      <div class="title">实时在线率</div>
+      <div class="title">相机实时在线率</div>
       <div class="info">
         <canvas width="370" height="20" ref="canvas_online"></canvas>
         <span>{{on_radio}}%</span>
       </div>
     </div>
     <div class="item">
-      <div class="title">实时通断率</div>
+      <div class="title">相机实时通断率</div>
       <div class="info">
         <canvas width="370" height="20" ref="canvas_offline"></canvas>
         <span>{{off_radio}}%</span>

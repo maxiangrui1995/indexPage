@@ -4,17 +4,17 @@
     <div class="selectbox">
       <Dropdown @on-click="dropDownItemSelect">
         <a href="javascript:void(0)">
-          {{dropMenuSelected.dev_name}}
+          {{videoData.dev_name}}
 
           <Icon type="arrow-down-b"></Icon>
         </a>
         <DropdownMenu slot="list">
-          <DropdownItem v-for="(item,index) in crossing_box" :key="index" :name="item.dev_name">{{item.dev_name}}</DropdownItem>
+          <DropdownItem v-for="(item,index) in videoDatas" :key="index" :name="item.dev_name">{{item.dev_name}}</DropdownItem>
         </DropdownMenu>
       </Dropdown>
     </div>
     <div class="box">
-      <div class="header" :title="devData.address">
+      <div class="header" :title="videoData.address">
         <object type='application/x-vlc-plugin' pluginspage="http://www.videolan.org/" id='vlc' events='false' width="424" height="253">
           <param name='mrl' value='rtsp://admin:admin123456@192.168.0.198' />
           <param name='volume' value='50' />
@@ -31,10 +31,10 @@
           </YNode>
         </div>
         <div class="item">
-          <div class="info">设备厂家：{{devData.sdk}}</div>
-          <div class="info">生命周期：{{devData.valid_time}}年</div>
-          <div class="info">品牌型号：{{devData.brand}}-{{devData.model}}</div>
-          <div class="info">建设单位：{{devData.build_company}}</div>
+          <div class="info">设备厂家：{{videoData.sdk}}</div>
+          <div class="info">生命周期：{{videoData.valid_time}}年</div>
+          <div class="info">品牌型号：{{videoData.brand}}-{{data.model}}</div>
+          <div class="info">建设单位：{{videoData.build_company}}</div>
         </div>
       </div>
     </div>
@@ -51,8 +51,8 @@ export default {
   },
   data() {
     return {
-      dropMenuSelected: {},
-      devData: {}
+      videoData: {},
+      videoDatas: []
     };
   },
   methods: {
@@ -66,15 +66,17 @@ export default {
         }
       });
     },
-    loadData() {
+    loadData(dev_code) {
       this.$http
         .post("Ma_zong/playVideo", {
-          dev_code: this.dropMenuSelected.dev_code,
+          dev_code: dev_code,
           tag: "njdh"
         })
         .then(res => {
           let data = res.data;
-          this.devData = data.data;
+          this.videoDatas = data.data || {};
+          this.videoData = data.data[0] || {};
+          console.log(this.videoDatas);
         });
     }
   },
@@ -89,8 +91,8 @@ export default {
   watch: {
     organize_show(value) {},
     crossing_box(value) {
-      this.dropMenuSelected = value[0];
-      this.loadData();
+      console.log(value);
+      this.loadData(value.dev_code);
     }
   }
 };

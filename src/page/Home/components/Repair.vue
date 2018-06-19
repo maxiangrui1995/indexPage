@@ -12,15 +12,15 @@
       <div class="info">
         <div class="item header">
           <div>自动修复率</div>
-          <div class="num">{{artificial}}%</div>
+          <div class="num">{{auto_radio}}%</div>
         </div>
         <div class="item">
           <div>自动修复</div>
-          <div class="num">{{auto_radio}}个</div>
+          <div class="num">{{automatic}}个</div>
         </div>
         <div class="item">
           <div>人工修复</div>
-          <div class="num">{{automatic}}个</div>
+          <div class="num">{{artificial}}个</div>
         </div>
       </div>
     </div>
@@ -154,7 +154,7 @@ export default {
   },
   computed: {
     TOTAL() {
-      return this.data.auto_radio + this.data.automatic;
+      return this.data.automatic + this.data.artificial;
     },
     msgRequire() {
       return this.$store.state.msgRequire;

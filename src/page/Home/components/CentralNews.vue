@@ -267,7 +267,7 @@ export default {
     },
     // 普通状态动画
     plainAnnimate() {
-      let textArray = ["设备巡检...", "视频检测...", "巡检修复..."];
+      let textArray = ["正在设备巡检...", "正在视频检测...", "正在巡检修复..."];
       let index = Math.floor(Math.random() * 3);
       this.msgPlainText = textArray[index];
 
@@ -278,7 +278,7 @@ export default {
           setTimeout(() => {
             this.data.shift();
           }, 3000);
-        }, 3000);
+        }, 7000);
       }, 1000);
     }
   },
@@ -576,9 +576,10 @@ export default {
     top: 34px;
     left: 22px;
     width: 344px;
+    height: 607px;
     &:before {
       width: 591px;
-      height: 607px;
+      height: 620px;
       margin-left: -280px;
       transform-origin: 291.5px 320.5px;
       animation: anim-circle 60s linear infinite;
@@ -588,9 +589,10 @@ export default {
     top: 39px;
     right: 27px;
     width: 344px;
+    height: 607px;
     &:before {
       width: 591px;
-      height: 602px;
+      height: 620px;
       margin-left: 76px;
       transform-origin: 291.5px 320.5px;
       animation: anim-circle-anticlockwise 60s linear infinite;

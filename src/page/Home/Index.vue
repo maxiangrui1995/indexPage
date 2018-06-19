@@ -102,7 +102,6 @@ export default {
 
             this.$store.commit("setLogin", true);
             this.$store.commit("setOriganizeShow", data.organize_show[0]);
-            this.$store.commit("setCrossingBox", data.crossing_box);
           }
         })
         .catch(res => {
