@@ -1,20 +1,45 @@
 <template>
-    <div class="wrapper">
-        <ul class="menu">
-            <li class="active">首页</li>
+  <div class="wrapper">
+    <ul class="menu">
+      <!-- <li class="active">首页</li>
             <li class="zcgl">资产管理</li>
             <li class="sjksh">数据可视化</li>
             <li class="zd">诊断</li>
-            <li class="tjfx">统计分析</li>
-        </ul>
-        <div class="datetime">{{dateTime}}</div>
-    </div>
+            <li class="tjfx">统计分析</li> -->
+      <li class="active">
+        <a href="">首页</a>
+      </li>
+      <li v-for="(item,index) in menuList" :key="index" :class="item.class">
+        <a href="#" @click="linkTo(item)">{{item.name}}</a>
+      </li>
+    </ul>
+    <div class="datetime">{{dateTime}}</div>
+  </div>
 </template>
 
 <script>
 export default {
   data() {
-    return { dateTime: "" };
+    let base = "../../PHP/public/index.php/index/index/index.html";
+    return {
+      dateTime: "",
+      menuList: [
+        {
+          name: "资产管理",
+          class: "zcgl"
+        },
+        {
+          name: "数据可视化",
+          class: "sjksh"
+        },
+        { name: "诊断", class: "zd" },
+        {
+          url: encodeURI(`${base}?q=统计分析`),
+          name: "统计分析",
+          class: "tjfx"
+        }
+      ]
+    };
   },
   methods: {
     getDateTime() {
@@ -35,6 +60,12 @@ export default {
       setInterval(() => {
         this.getDateTime();
       }, 1000);
+    },
+    linkTo(data) {
+      window.location.href = encodeURI(
+        "../../PHP/public/index.php/index/index/index.html?q=" +
+          encodeURIComponent(data.name)
+      );
     }
   },
   created() {
@@ -62,6 +93,9 @@ export default {
       font-size: 1.28em;
       padding-left: 55px;
       margin-left: 20px;
+      a {
+        color: inherit;
+      }
     }
     li:first-child {
       margin-left: 10px;

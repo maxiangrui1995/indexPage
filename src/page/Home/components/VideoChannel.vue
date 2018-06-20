@@ -20,6 +20,7 @@
           <param name='autoplay' value='true' />
           <param name='loop' value='false' />
           <param name='fullscreen' value='false' /> -->
+          <param name='wmode' value='Opaque'>
           <param name='mrl' :value='videoDataSelected.address' />
         </object>
       </div>

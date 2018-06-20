@@ -13,9 +13,9 @@ import "./style/index.less";
 
 
 // dev
-axios.defaults.baseURL = "/api/";
+// axios.defaults.baseURL = "/api/";
 // build
-// axios.defaults.baseURL = "../PHP/public/index.php/index";
+axios.defaults.baseURL = "../../PHP/public/index.php/index";
 axios.defaults.headers.post["Content-Type"] =
   "application/x-www-form-urlencoded";
 

@@ -67,7 +67,7 @@ const organize_show = () => {
 const crossing_box = () => {
 	return Mock.mock({
 		"dev_code": "6e7a863a-5ffc-11e8-b047-7085c2388a55",
-		"dev_name": Random.cname()
+		"name": Random.cname()
 	})
 }
 const crossing_box_random = () => {
@@ -120,7 +120,7 @@ const control_center = () => {
 	})
 }
 const control_center_random = () => {
-	if (Random.boolean()) {
+	if (Random.boolean(1, 2, true)) {
 		return [control_center()]
 	} else {
 		return [];

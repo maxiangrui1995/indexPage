@@ -186,6 +186,7 @@ export default {
             this.featchData.push(...res.data.data);
           } else {
             this.featchData.push(false);
+            this.featchData = Array.from(new Set(this.featchData));
           }
         });
       }, 5000);
@@ -193,6 +194,7 @@ export default {
     // 定义线程
     lwp() {
       let data = this.data;
+      console.log(data);
 
       if (data.length) {
         if (data[0]) {
