@@ -1,40 +1,39 @@
 <template>
   <div class="wrapper">
     <div class="title hightlight">视频通道</div>
-    <div class="selectbox">
+    <div class="selectbox" v-if="videoData.length>0?true:false">
       <Dropdown @on-click="dropDownItemSelect">
         <a href="javascript:void(0)">
-          {{videoData.dev_name}}
-
+          {{videoDataSelected.dev_name}}
           <Icon type="arrow-down-b"></Icon>
         </a>
         <DropdownMenu slot="list">
-          <DropdownItem v-for="(item,index) in videoDatas" :key="index" :name="item.dev_name">{{item.dev_name}}</DropdownItem>
+          <DropdownItem v-for="(item,index) in videoData" :key="index" :name="item.dev_name">{{item.dev_name}}</DropdownItem>
         </DropdownMenu>
       </Dropdown>
     </div>
     <div class="box">
-      <div class="header" :title="videoData.address">
-        <object type='application/x-vlc-plugin' pluginspage="http://www.videolan.org/" id='vlc' events='false' width="424" height="253">
-          <param name='mrl' value='rtsp://admin:admin123456@192.168.0.198' />
+      <div class="header" :title="videoDataSelected.address">
+        <object v-if="videoData.length>0?true:false" type='application/x-vlc-plugin' pluginspage="http://www.videolan.org/" id='vlc' events='false' width="424" height="253">
+          <!--  <param name='mrl' value='rtsp://admin:admin123456@192.168.0.198' />
           <param name='volume' value='50' />
           <param name='autoplay' value='true' />
           <param name='loop' value='false' />
-          <param name='fullscreen' value='false' />
+          <param name='fullscreen' value='false' /> -->
+          <param name='mrl' :value='videoDataSelected.address' />
         </object>
       </div>
-      <div class="body">
+      <div class="body" v-if="videoData.length>0?true:false">
         <div class="item">
-          <!-- <div class="node">{{organize_show.name}}</div> -->
           <YNode>
-            <span :title="organize_show.name">{{organize_show.name}}</span>
+            <span :title="videoDataSelected.name">{{videoDataSelected.name}}</span>
           </YNode>
         </div>
         <div class="item">
-          <div class="info">设备厂家：{{videoData.sdk}}</div>
-          <div class="info">生命周期：{{videoData.valid_time}}年</div>
-          <div class="info">品牌型号：{{videoData.brand}}-{{data.model}}</div>
-          <div class="info">建设单位：{{videoData.build_company}}</div>
+          <div class="info">设备厂家：{{videoDataSelected.sdk}}</div>
+          <div class="info">生命周期：{{videoDataSelected.valid_time}}年</div>
+          <div class="info">品牌型号：{{videoDataSelected.brand}}-{{data.model}}</div>
+          <div class="info">建设单位：{{videoDataSelected.build_company || '-'}}</div>
         </div>
       </div>
     </div>
@@ -51,8 +50,8 @@ export default {
   },
   data() {
     return {
-      videoData: {},
-      videoDatas: []
+      videoData: [],
+      videoDataSelected: {}
     };
   },
   methods: {
@@ -74,24 +73,19 @@ export default {
         })
         .then(res => {
           let data = res.data;
-          this.videoDatas = data.data || {};
-          this.videoData = data.data[0] || {};
-          console.log(this.videoDatas);
+          this.videoData = data.data;
+          this.videoDataSelected = data.data[0] || {};
+          console.log(this.videoData);
         });
     }
   },
   computed: {
-    organize_show(value) {
-      return this.$store.state.organize_show_selected;
-    },
     crossing_box(value) {
       return this.$store.state.crossing_box_selected;
     }
   },
   watch: {
-    organize_show(value) {},
     crossing_box(value) {
-      console.log(value);
       this.loadData(value.dev_code);
     }
   }

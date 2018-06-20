@@ -2,7 +2,7 @@
   <div class="box">
     <div class="body">
       <div class="img">
-        <img :src="'http://127.0.0.1/znyw3.0/PHP/public'+data.fault_img_url" alt="路口图片">
+        <img :src="'./znyw3.0/PHP/public'+data.fault_img_url" alt="路口图片">
       </div>
       <div class="info">
         <div class="item">

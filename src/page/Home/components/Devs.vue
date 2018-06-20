@@ -11,9 +11,13 @@
         </div>
       </div>
       <div class="table-body">
-        <div class="tr" v-for="(item,index) in data" :key="index" :class="'bg'+index">
-          <div class="td">{{item.name}}</div>
-          <div class="td">{{item.count}}</div>
+        <div v-for="(item,index) in data" :key="index">
+          <transition name="fade">
+            <div class="tr" :class="'bg'+item.category_num" v-if="index===0?itemShow:true">
+              <div class="td">{{item.name}}</div>
+              <div class="td">{{item.count}}</div>
+            </div>
+          </transition>
         </div>
       </div>
     </div>
@@ -26,8 +30,23 @@ export default {
     data: Array
   },
   data() {
-    return {};
-  }
+    return { itemShow: true };
+  },
+  computed: {},
+  watch: {
+    data(data) {
+      setTimeout(() => {
+        /*   */
+        this.itemShow = false;
+        setTimeout(() => {
+          this.itemShow = true;
+          data.push(data[0]);
+          data.shift();
+        }, 1000);
+      }, 2000);
+    }
+  },
+  mounted() {}
 };
 </script>
 
@@ -39,6 +58,24 @@ export default {
   to {
     transform: translateY(-210px);
   }
+}
+@keyframes anim-fade {
+  0% {
+    left: 0;
+    opacity: 1;
+  }
+  100% {
+    left: -40px;
+    opacity: 0;
+  }
+}
+.fade-enter-active {
+  // animation: anim-fade 1.5s;
+  opacity: 0;
+  display: none;
+}
+.fade-leave-active {
+  animation: anim-fade 1s;
 }
 .wrapper {
   padding: 35px 0;
@@ -81,8 +118,8 @@ export default {
       overflow: hidden;
       padding-top: 3px;
       .tr {
-        animation: anim-translate 25s linear infinite;
-        animation-fill-mode: both;
+        /* animation: anim-translate 25s linear infinite;
+        animation-fill-mode: both; */
         height: 30px;
         background: linear-gradient(to right, #1259c4, rgba(20, 64, 156, 0.2));
         border-left: 4px solid #fedb4b;
@@ -105,31 +142,31 @@ export default {
         }
       }
       //视频设备
-      .bg0 {
+      .bg1 {
         &:before {
           background: url("~@/assets/dev02.png") no-repeat;
         }
       }
       // 服务器
-      .bg1 {
+      .bg2 {
         &:before {
           background: url("~@/assets/dev01.png") no-repeat;
         }
       }
       // 动环设备
-      .bg2 {
+      .bg3 {
         &:before {
           background: url("~@/assets/dev03.png") no-repeat;
         }
       }
       // 机箱设备
-      .bg3 {
+      .bg4 {
         &:before {
           background: url("~@/assets/dev04.png") no-repeat;
         }
       }
       // 网络设备
-      .bg4 {
+      .bg5 {
         &:before {
           background: url("~@/assets/dev05.png") no-repeat;
         }
