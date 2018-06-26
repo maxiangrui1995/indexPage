@@ -1,16 +1,16 @@
 <template>
   <div id="app">
-    <IndexPage/>
+    <HomePage/>
   </div>
 </template>
 
 <script>
-import IndexPage from "./components/IndexPage";
+import HomePage from "@/page/Home/Index";
 
 export default {
   name: "App",
   components: {
-    IndexPage
+    HomePage
   },
   beforeCreate() {
     this.$Loading.start();
@@ -22,14 +22,4 @@ export default {
 </script>
 
 <style>
-body,
-html {
-  width: 100%;
-  height: 100%;
-}
-#app {
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-}
 </style>
