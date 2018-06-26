@@ -4,7 +4,6 @@ import Vue from "vue";
 import App from "./App";
 import iView from "iview";
 import axios from "axios";
-import store from "./store";
 
 // import "@/mock";
 import "iview/dist/styles/iview.css";
@@ -13,9 +12,9 @@ import "./style/index.less";
 
 
 // dev
-// axios.defaults.baseURL = "/api/";
+axios.defaults.baseURL = "/api/";
 // build
-axios.defaults.baseURL = "../../PHP/public/index.php/index";
+// axios.defaults.baseURL = "../../PHP/public/index.php/index";
 axios.defaults.headers.post["Content-Type"] =
   "application/x-www-form-urlencoded";
 
@@ -27,7 +26,6 @@ Vue.prototype.$http = axios;
 /* eslint-disable no-new */
 new Vue({
   el: "#app",
-  store,
   components: { App },
   template: "<App/>"
 });
