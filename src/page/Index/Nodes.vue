@@ -3,7 +3,7 @@
     <div class="box" v-if="show">
       <div class="box-header hightlight">运维节点</div>
       <div class="box-body">
-        <Row :gutter="100" class="box-body-inner">
+        <Row class="box-body-inner">
           <i-col span="12" class="box-body-inner-item">
             <div class="box-body-inner-item-left"></div>
             <div class="box-body-inner-item-right">
@@ -52,12 +52,12 @@ export default {
     text-align: center;
   }
   &-body {
-    padding: 0 30px;
     &-inner {
-      padding: 20px;
+      padding: 30px 0;
     }
     &-inner-item {
       display: table;
+      padding-left: 50px;
       &-left {
         display: table-cell;
         width: 55px;

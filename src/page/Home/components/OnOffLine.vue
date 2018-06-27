@@ -143,6 +143,7 @@ export default {
       display: inline-block;
       height: 20px;
       line-height: 20px;
+      color: #6acef0;
       text-indent: 2px;
     }
   }
