@@ -62,10 +62,9 @@ export default {
       }, 1000);
     },
     linkTo(data) {
-      window.location.href = encodeURI(
-        "../../PHP/public/index.php/index/index/index.html?q=" +
-          encodeURIComponent(data.name)
-      );
+      sessionStorage.setItem("jk_url", data.name);
+      window.location.href =
+        "../../PHP/public/index.php/index/index/index.html";
     }
   },
   created() {

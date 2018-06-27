@@ -3,10 +3,10 @@ const Random = Mock.Random;
 
 /* 在线率 */
 const online_radio = () => {
-	let on_radio = Random.float(0, 100, 2, 2);
+	let on_radio = Random.float(0, 100, 0, 2);
 	return Mock.mock({
 		on_radio: on_radio,
-		off_radio: 100 - on_radio
+		off_radio: parseFloat((100 - on_radio).toFixed(2))
 	})
 }
 /* 节点数 */
@@ -78,9 +78,9 @@ const crossing_box_random = () => {
 /* 自动修复 */
 const fault_repair = () => {
 	return Mock.mock({
-		"artificial": Random.integer(0, 100),		//自动修复率
-		"auto_radio": Random.integer(0, 99999),  // 自动修复数
-		"automatic": Random.integer(0, 99999)			//人工修复数
+		"auto_radio": 100,		//自动修复率
+		"automatic": Random.integer(0, 99999),  // 自动修复数
+		"artificial": Random.integer(0, 99999)			//人工修复数
 	})
 }
 /* 故障原因 */
@@ -109,14 +109,15 @@ const control_center = () => {
 	return Mock.mock({
 		"id|+1": 0,
 		//消息类型
-		"message_type": Random.integer(0, 3),
+		"message_type": '@integer(0,3)'/* Random.integer(0, 3) */,
 		//故障类型
 		"fault_type|1": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 50, 52, 54, 100, 102, 104, 106, 108, 110, 112, 114],
 		//故障描述
 		"memo": Random.csentence(5, 10),
 		"level": Random.integer(0, 5),
 		// 路口名称
-		"crossing_name": Random.csentence(5, 10)
+		"crossing_name": Random.csentence(5, 10),
+		"create_time": "@time"
 	})
 }
 const control_center_random = () => {
@@ -188,14 +189,13 @@ const indexAllData = Mock.mock({
 	//故障原因
 	"current_fault|4": [current_fault],
 	//中心控制数据
-	"control_center": [control_center]
+	"control_center|3": [control_center]
 })
 
 //当post或get请求到/news路由时Mock会拦截请求并返回上面的数据
-Mock.mock("/api/Ma_zong/indexAllData", /post|get/i, { data: indexAllData });
+Mock.mock("/api/Ma_zong/indexAllData", /post|get/i, { data: indexAllData, status: "1" });
 
-Mock.mock("/api/Ma_zong/nodeNumber", /post|get/i, { data: node_number });
-Mock.mock("/api/Ma_zong/onlineRadio", /post|get/i, { data: online_radio });
-Mock.mock("/api/Ma_zong/controlCenter", /post|get/i, { data: control_center_random });
-Mock.mock("/api/Ma_zong/crossingBox", /post|get/i, { data: crossing_box_random });
-Mock.mock("/api/Ma_zong/playVideo", /post|get/i, { data: play_video });
+Mock.mock("/api/Ma_zong/nodeNumber", /post|get/i, { data: node_number, status: "1" });
+Mock.mock("/api/Ma_zong/onlineRadio", /post|get/i, { data: online_radio, status: "1" });
+Mock.mock("/api/Ma_zong/controlCenter", /post|get/i, { data: control_center_random, status: "1" });
+// Mock.mock("/api/Ma_zong/playVideo", /post|get/i, { data: play_video, status: "1" });

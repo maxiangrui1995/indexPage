@@ -2,11 +2,8 @@ import Vue from "vue";
 import Vuex from "vuex";
 Vue.use(Vuex);
 
-
 export default new Vuex.Store({
     state: {
-        // 当前是否登录
-        isLogin: false,
         // 中心消息-故障
         msgFailure: {},
         // 中心消息-故障
@@ -17,9 +14,6 @@ export default new Vuex.Store({
         crossing_box_selected: []
     },
     mutations: {
-        setLogin(state, data){
-            state.isLogin = data;
-        },
         setMsgFailure(state, data) {
             state.msgFailure = data;
         },

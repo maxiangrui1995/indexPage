@@ -1,8 +1,8 @@
 <template>
-  <div class="box">
+  <div class="wrapper">
     <div class="body">
       <div class="img">
-        <img :src="'./znyw3.0/PHP/public'+data.fault_img_url" alt="路口图片">
+        <img :src="'../../PHP/public'+data.fault_img_url" alt="路口图片">
       </div>
       <div class="info">
         <div class="item">
@@ -16,7 +16,7 @@
         </div>
         <div class="item">
           故障时间
-          <div class="msg ok">{{data.create_time}}</div>
+          <div class="msg ok time">{{data.create_time}}</div>
         </div>
       </div>
     </div>
@@ -53,7 +53,7 @@ export default {
 </script>
 
 <style scoped lang='less'>
-.box {
+.wrapper {
   padding: 20px 0 14px 0;
   border-bottom: 2px solid fade(#6b6767, 20%);
   .body {
@@ -77,15 +77,18 @@ export default {
       display: table-cell;
       text-indent: 10px;
       .item {
-        height: 30px;
-        line-height: 30px;
+        height: 36px;
+        line-height: 36px;
         color: #f1f1f1;
         position: relative;
         font-size: 1.08em;
         .msg {
           position: absolute;
-          top: 4px;
+          top: 7px;
           right: 20px;
+        }
+        .time {
+          top: 0px;
         }
         .ok {
           color: #67c7eb;
@@ -138,25 +141,3 @@ export default {
 }
 </style>
 
-<style>
-.ivu-carousel-item > .box:last-child {
-  border: none;
-}
-.my-carousel .ivu-carousel-dots li button.radius {
-  width: 14px;
-  height: 14px;
-  margin: 0 16px;
-  background: transparent;
-  border: 2px solid #67c7eb;
-}
-.my-carousel .ivu-carousel-dots li.ivu-carousel-active > button.radius {
-  background: #67c7eb;
-}
-.my-carousel .ivu-carousel-dots {
-  height: 40px;
-  background: url("~@/assets/lighthight.png") right;
-}
-.my-carousel .ivu-carousel-dots li {
-  padding: 12px 0;
-}
-</style>

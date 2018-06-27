@@ -79,7 +79,6 @@ export default {
         .then(res => {
           let data = res.data.data;
           if (data) {
-
             // 在线率
             this.online_radio = data.online_radio;
             // 节点数

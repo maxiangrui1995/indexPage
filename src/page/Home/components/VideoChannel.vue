@@ -33,7 +33,7 @@
         <div class="item">
           <div class="info">设备厂家：{{videoDataSelected.sdk}}</div>
           <div class="info">生命周期：{{videoDataSelected.valid_time}}年</div>
-          <div class="info">品牌型号：{{videoDataSelected.brand}}-{{data.model}}</div>
+          <div class="info">品牌型号：{{videoDataSelected.brand}}-{{videoDataSelected.brand}}</div>
           <div class="info">建设单位：{{videoDataSelected.build_company || '-'}}</div>
         </div>
       </div>
@@ -46,9 +46,6 @@ import YNode from "@/components/Node";
 
 export default {
   components: { YNode },
-  props: {
-    data: Object
-  },
   data() {
     return {
       videoData: [],
@@ -59,8 +56,6 @@ export default {
     dropDownItemSelect(name) {
       this.crossing_box.forEach(item => {
         if (item.dev_name === name) {
-          console.log(item);
-
           this.dropMenuSelected = item;
           this.loadData();
         }
@@ -74,9 +69,10 @@ export default {
         })
         .then(res => {
           let data = res.data;
-          this.videoData = data.data;
-          this.videoDataSelected = data.data[0] || {};
-          console.log(this.videoData);
+          console.log(data);
+
+          this.videoData = data;
+          // this.videoDataSelected = data[0] || {};
         });
     }
   },
