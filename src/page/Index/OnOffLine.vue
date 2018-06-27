@@ -79,12 +79,12 @@ export default {
   created() {
     // let Value = Number(newValue.toFixed(2)) || 0;
     this.$nextTick(() => {
-      this.animateDrawView(
+      /* this.animateDrawView(
         this.$refs.canvas_online,
         20,
         this.on_radio,
         "on_radio"
-      );
+      ); */
       setTimeout(() => {
         this.show = true;
       }, 250);

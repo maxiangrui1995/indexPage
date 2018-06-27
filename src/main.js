@@ -10,11 +10,13 @@ import "iview/dist/styles/iview.css";
 import "vue2-scrollbar/dist/style/vue2-scrollbar.css";
 import "./style/index.less";
 
-
-// dev
-axios.defaults.baseURL = "/api/";
-// build
-// axios.defaults.baseURL = "../../PHP/public/index.php/index";
+// 环境默认指向开发环境
+const env = process.env.NODE_ENV || "development";
+if (env === 'production') {
+  axios.defaults.baseURL = "../../PHP/public/index.php/index";
+} else {
+  axios.defaults.baseURL = "/api/";
+}
 axios.defaults.headers.post["Content-Type"] =
   "application/x-www-form-urlencoded";
 
