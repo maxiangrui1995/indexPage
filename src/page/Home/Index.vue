@@ -79,7 +79,6 @@ export default {
         .then(res => {
           let data = res.data.data;
           if (data) {
-            console.log("AllData:", data.control_center);
 
             // 在线率
             this.online_radio = data.online_radio;

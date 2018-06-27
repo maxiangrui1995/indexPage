@@ -194,7 +194,6 @@ export default {
     // 定义线程
     lwp() {
       let data = this.data;
-      console.log(data);
 
       if (data.length) {
         if (data[0]) {
