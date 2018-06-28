@@ -1,8 +1,8 @@
 <template>
   <div class="box">
     <p class="box-info hightlight">视频通道</p>
-    <div class="selectbox" v-if="videoData.length>0">
-      <Dropdown @on-click="dropDownItemSelect">
+    <div class="selectbox" style="z-index:2;" v-if="videoData.length>0">
+      <Dropdown @on-click="dropDownItemSelect" placement="right-start">
         <a href="javascript:void(0)">
           {{videoDataSelected.dev_name}}
           <Icon type="arrow-down-b"></Icon>
@@ -13,14 +13,15 @@
       </Dropdown>
     </div>
     <div class="box-content">
-      <div class="box-content-title">
-        <object v-if="videoData.length" type='application/x-vlc-plugin' pluginspage="http://www.videolan.org/" id='vlc' events='false' width="424" height="253">
+      <div class="box-content-title" style="z-index:1;">
+        <object v-if="vlcShow" type='application/x-vlc-plugin' pluginspage="http://www.videolan.org/" id='vlc' events='false' width="424" height="253" :style="{width:vlcWidth+'px'}">
           <!--  <param name='mrl' value='rtsp://admin:admin123456@192.168.0.198' />
           <param name='volume' value='50' />
           <param name='autoplay' value='true' />
           <param name='loop' value='false' />
           <param name='fullscreen' value='false' /> -->
-          <param name='wmode' value='Opaque'>
+          <!--  <param name="wmode" value="transparent">
+          <param name='wmode' value='Opaque'> -->
           <param name='mrl' :value='videoDataSelected.address' />
         </object>
       </div>
@@ -45,16 +46,33 @@ export default {
   data() {
     return {
       videoData: [],
-      videoDataSelected: {}
+      videoDataSelected: {},
+      vlcShow: false,
+      vlcWidth: 424
     };
   },
   methods: {
     dropDownItemSelect(name) {
+      let b = false;
+      let d = {};
       this.videoData.forEach(item => {
         if (item.dev_name == name) {
-          this.videoDataSelected = item;
+          d = item;
+          b = true;
         }
       });
+      this.vlcShow = false;
+      this.videoDataSelected = d;
+      if (b) {
+        setTimeout(() => {
+          this.vlcShow = true;
+          this.vlcWidth = 425;
+          setTimeout(() => {
+            this.vlcShow = true;
+            this.vlcWidth = 424;
+          }, 300);
+        }, 100);
+      }
     },
     loadData(dev_code) {
       this.$http("Ma_zong/playVideo", {
@@ -62,7 +80,8 @@ export default {
       }).then(res => {
         let data = res.data;
         this.videoData = data;
-        this.videoDataSelected = data[0] || {};
+        let d = data[0] || {};
+        this.dropDownItemSelect(d.dev_name);
       });
     }
   },
@@ -73,7 +92,6 @@ export default {
   },
   watch: {
     crossing_box(value) {
-      console.log(value);
       this.loadData(value.dev_code);
     }
   }
@@ -88,7 +106,7 @@ export default {
   height: 390px;
   .selectbox {
     position: absolute;
-    left: 235px;
+    right: 24px;
     top: 10px;
     a {
       color: #d0ab54;

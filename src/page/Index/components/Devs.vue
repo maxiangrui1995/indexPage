@@ -10,14 +10,14 @@
           </div>
         </div>
         <div class="table-body">
-          <div v-for="(item,index) in data" :key="index">
-            <transition name="fade-side">
-              <div class="tr" :class="'bg'+item.category_num" v-if="index<=1?itemShow:true">
+          <transition-group name="list" tag="div">
+            <div v-for="(item) in items" v-bind:key="item.category_num" class="list-item">
+              <div :class="'bg'+item.category_num" class="tr">
                 <div class="td">{{item.name}}</div>
                 <div class="td">{{item.count}}</div>
               </div>
-            </transition>
-          </div>
+            </div>
+          </transition-group>
         </div>
       </div>
     </div>
@@ -31,20 +31,30 @@ export default {
   },
   data() {
     return {
-      itemShow: true
+      items: []
     };
   },
   methods: {},
+  created() {
+    setInterval(() => {
+      let d = this.items[0];
+      this.items.splice(0, 1);
+      this.items.push(d);
+    }, 5000);
+  },
   watch: {
     data(data) {
-      setTimeout(() => {
-        this.itemShow = false;
-        setTimeout(() => {
-          this.itemShow = true;
-          data.push(data[0]);
-          data.shift();
-        }, 1200);
-      }, 5000);
+      if (this.items.length) {
+        data.forEach(item => {
+          this.items.forEach(item2 => {
+            if (item2.category_num == item.category_num) {
+              item2.count = item.count;
+            }
+          });
+        });
+      } else {
+        this.items = data;
+      }
     }
   }
 };
@@ -134,19 +144,23 @@ export default {
   }
 }
 
-.fade-side-enter-active {
-  transform: translateY(0);
-  transition: all 1.2s ease;
+.list-item {
+  display: block;
+  margin-right: 10px;
+  position: relative;
+  color: #ddd;
 }
-.fade-side-leave-active {
-  transition: all 1.2s ease;
+.list-move,
+.list-enter-active,
+.list-leave-active {
+  transition: 1s;
 }
-.fade-side-enter {
-  transform: translateY(38px);
+.list-leave-active {
+  position: absolute;
+}
+.list-enter,
+.list-leave-to {
   opacity: 0;
-}
-.fade-side-leave-to {
-  transform: translateX(-400px);
-  opacity: 0;
+  transform: translateY(30px);
 }
 </style>

@@ -112,7 +112,8 @@ export default {
       let page = this.page;
       let rows = this.rows;
       let bool = true;
-      if (page < Math.floor(total / rows)) {
+
+      if (page < Math.ceil(total / rows)) {
         bool = false;
       }
       return {

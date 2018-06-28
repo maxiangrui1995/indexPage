@@ -172,6 +172,12 @@ export default {
             this.online_radio = res.data;
           }
         });
+        // 设备数
+        this.$http("Ma_zong/countAssets").then(res => {
+          if (res.status) {
+            this.count_assets = res.data;
+          }
+        });
       }, 5000);
     },
     // 入场动画
@@ -207,7 +213,7 @@ export default {
   width: 1920px;
   height: 1080px;
   position: relative;
-  background: url("~@/assets/backdrop.png");
+  background: url("~@/assets/backdrop.png") #0d2c6d;
   &-header {
     width: 100%;
     height: 78px;

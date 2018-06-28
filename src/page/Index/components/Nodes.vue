@@ -80,7 +80,7 @@ export default {
     }
     &-inner-item {
       display: table;
-      padding-left: 50px;
+      padding-left: 40px;
       &-left {
         display: table-cell;
         width: 55px;
@@ -88,6 +88,7 @@ export default {
         vertical-align: top;
       }
       &-right {
+        width: 135px;
         text-indent: 10px;
         div {
           height: 30px;

@@ -1,47 +1,90 @@
 import Mock from "mockjs";
 const Random = Mock.Random;
 
-/* 在线率 */
-const online_radio = () => {
-	let on_radio = Random.float(0, 100, 0, 2);
-	return Mock.mock({
-		on_radio: on_radio,
-		off_radio: parseFloat((100 - on_radio).toFixed(2))
-	})
-}
-/* 节点数 */
+// 节点数
 const node_number = () => {
 	return Mock.mock({
-		sum: Random.integer(0, 99999),
-		online: Random.integer(0, 99999)
+		"sum": "@integer(0, 99999)",
+		"online": "@integer(0, 99999)"
 	})
 }
-/* 资产统计 */
-const count_assets = () => {
-	return Mock.mock([{
-		category_num: "1",
-		count: Random.integer(0, 99999),
-		name: "视频设备"
-	}, {
-		category_num: "2",
-		count: Random.integer(0, 99999),
-		name: "服务器"
-	}, {
-		category_num: "3",
-		count: Random.integer(0, 99999),
-		name: "动环设备"
-	}, {
-		category_num: "4",
-		count: Random.integer(0, 99999),
-		name: "机箱设备"
-	}, {
-		category_num: "5",
-		count: Random.integer(0, 99999),
-		name: "网络设备"
-	}])
+Mock.mock("/api/Ma_zong/nodeNumber", /post|get/i, { data: node_number, status: "1" });
+
+// 在线离线率
+const online_radio = () => {
+	let p = Random.float(0, 100, 0, 2);
+	return Mock.mock({
+		on_radio: p,
+		off_radio: parseFloat((100 - p).toFixed(2))
+	})
 }
-/* 组织机构 */
+Mock.mock("/api/Ma_zong/onlineRadio", /post|get/i, { data: online_radio, status: "1" });
+
+// 资产统计
+const count_assets = () => {
+	return Mock.mock({
+		"data": [{
+			category_num: "1",
+			"count": "@integer(0, 99999)",
+			name: "视频设备"
+		}, {
+			category_num: "2",
+			"count": "@integer(0, 99999)",
+			name: "服务器"
+		}, {
+			category_num: "3",
+			"count": "@integer(0, 99999)",
+			name: "动环设备"
+		}, {
+			category_num: "4",
+			"count": "@integer(0, 99999)",
+			name: "机箱设备"
+		}, {
+			category_num: "5",
+			"count": "@integer(0, 99999)",
+			name: "网络设备"
+		}]
+	}).data
+}
+Mock.mock("/api/Ma_zong/countAssets", /post|get/i, { data: count_assets, status: "1" });
+
+// 中心控制消息
+const control_center = () => {
+	if (Random.boolean(1, 2, true)) {
+		return Mock.mock({
+			"data": [{
+				"id|+1": 0,
+				"message_type": '@integer(0,3)',
+				"fault_type|1": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 50, 52, 54, 100, 102, 104, 106, 108, 110, 112, 114],
+				"memo": "@csentence(5, 10)",
+				"level": "@integer(0, 5)",
+				"crossing_name": "@csentence(5, 10)",
+				"create_time": "@datetime"
+			}]
+		}).data;
+	} else {
+		return [];
+	}
+}
+Mock.mock("/api/Ma_zong/controlCenter", /post|get/i, { data: control_center, status: "1" });
+
+// 组织机构
 const organize_show = () => {
+	return Mock.mock({
+		"data|4": [{
+			"o_id|+1": 100,
+			"name": "@name"
+		}]
+	})
+}
+
+/* 在线率 */
+
+/* 节点数 */
+
+/* 资产统计 */
+/* 组织机构 */
+/* const organize_show1 = () => {
 	return Mock.mock([{
 		"o_id": "6e7a863a-5ffc-11e8-b047-7085c2388a55",
 		"name": "组织机构"
@@ -62,29 +105,29 @@ const organize_show = () => {
 		"o_id": "d6b48efc-f3d4-6512-bee8-055e4b4c6bd9",
 		"name": "测试一中队"
 	}])
-}
+} */
 /* 第一个组织机构下的机箱数据 */
-const crossing_box = () => {
+/* const crossing_box1 = () => {
 	return Mock.mock({
 		"dev_code": "6e7a863a-5ffc-11e8-b047-7085c2388a55",
 		"name": Random.cname()
 	})
-}
-const crossing_box_random = () => {
+} */
+/* const crossing_box_random = () => {
 	return Mock.mock({
 		"crossing_box|6": [crossing_box()]
 	}).crossing_box
-}
+} */
 /* 自动修复 */
-const fault_repair = () => {
+/* const fault_repair1 = () => {
 	return Mock.mock({
 		"auto_radio": 100,		//自动修复率
 		"automatic": Random.integer(0, 99999),  // 自动修复数
 		"artificial": Random.integer(0, 99999)			//人工修复数
 	})
-}
+} */
 /* 故障原因 */
-const current_fault = () => {
+/* const current_fault1 = () => {
 	return Mock.mock({
 		"id|1": 100,									//无所谓
 		"dev_code": "2000",							//为所谓
@@ -103,32 +146,29 @@ const current_fault = () => {
 		"is_auto_repair": 1,							//是否处于尝试自动修复0是1否
 		"dev_name": "测试相机_1（别动）",				//设备名称
 	})
-}
+} */
 /* 中心控制数据 */
-const control_center = () => {
+/* const control_center1 = () => {
 	return Mock.mock({
 		"id|+1": 0,
-		//消息类型
-		"message_type": '@integer(0,3)'/* Random.integer(0, 3) */,
-		//故障类型
+		"message_type": '@integer(0,3)',
 		"fault_type|1": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 50, 52, 54, 100, 102, 104, 106, 108, 110, 112, 114],
-		//故障描述
 		"memo": Random.csentence(5, 10),
 		"level": Random.integer(0, 5),
 		// 路口名称
 		"crossing_name": Random.csentence(5, 10),
 		"create_time": "@time"
 	})
-}
-const control_center_random = () => {
+} */
+/* const control_center_random1 = () => {
 	if (Random.boolean(1, 2, true)) {
 		return [control_center()]
 	} else {
 		return [];
 	}
-}
+} */
 /* 视频 */
-const play_video = () => {
+/* const play_video1 = () => {
 	return Mock.mock({
 		"id": 0,
 		"dev_code": "345678",
@@ -169,33 +209,33 @@ const play_video = () => {
 }
 
 /* 初次加载 */
-const indexAllData = Mock.mock({
+const indexAllData1 = Mock.mock({
 	// 在线率
-	"online_radio": online_radio,
+	"online_radio": "online_radio",
 	// 节点数
-	"node_number": node_number,
+	"node_number": "node_number",
 	// 资产统计
-	"count_assets": count_assets,
+	"count_assets": "count_assets",
 	// 组织机构
-	"organize_show": organize_show,
+	"organize_show": "organize_show",
 	// 第一个组织机构下的机箱数据
-	"crossing_box|5": [crossing_box],
+	"crossing_box|5": ["crossing_box"],
 	// 视频
 	"play_video": [
-		play_video
+		"play_video"
 	],
 	//自动修复
-	"fault_repair": fault_repair,
+	"fault_repair": "fault_repair",
 	//故障原因
-	"current_fault|4": [current_fault],
+	"current_fault|4": ["current_fault"],
 	//中心控制数据
-	"control_center|3": [control_center]
+	"control_center|3": ["control_center"]
 })
 
 //当post或get请求到/news路由时Mock会拦截请求并返回上面的数据
-Mock.mock("/api/Ma_zong/indexAllData", /post|get/i, { data: indexAllData, status: "1" });
+// Mock.mock("/api/Ma_zong/indexAllData", /post|get/i, { data: indexAllData, status: "1" });
 
-Mock.mock("/api/Ma_zong/nodeNumber", /post|get/i, { data: node_number, status: "1" });
-Mock.mock("/api/Ma_zong/onlineRadio", /post|get/i, { data: online_radio, status: "1" });
-Mock.mock("/api/Ma_zong/controlCenter", /post|get/i, { data: control_center_random, status: "1" });
+// Mock.mock("/api/Ma_zong/nodeNumber", /post|get/i, { data: node_number, status: "1" });
+// Mock.mock("/api/Ma_zong/onlineRadio", /post|get/i, { data: online_radio, status: "1" });
+// Mock.mock("/api/Ma_zong/controlCenter", /post|get/i, { data: control_center_random, status: "1" });
 // Mock.mock("/api/Ma_zong/playVideo", /post|get/i, { data: play_video, status: "1" });

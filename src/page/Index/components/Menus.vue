@@ -1,30 +1,18 @@
 <template>
-    <!-- <div class="wrapper">
-        <ul class="menu">
-            <li class="active">
-                <a href="">首页</a>
-            </li>
-            <li v-for="(item,index) in menuList" :key="index" :class="item.class">
-                <a href="#" @click="linkTo(item)">{{item.name}}</a>
-            </li>
-        </ul>
-        <div class="datetime">{{dateTime}}</div>
-    </div> -->
-    <div class="box">
-        <ul class="menu">
-            <li class="active">首页</li>
-            <li v-for="(item,index) in menuList" :key="index" :class="item.class" @click="linkTo(item)">
-                {{item.name}}
-            </li>
-        </ul>
-        <div class="datetime">{{dateTime}}</div>
-    </div>
+  <div class="box">
+    <ul class="menu">
+      <li class="active">首页</li>
+      <li v-for="(item,index) in menuList" :key="index" :class="item.class" @click="linkTo(item)">
+        {{item.name}}
+      </li>
+    </ul>
+    <div class="datetime">{{dateTime}}</div>
+  </div>
 </template>
 
 <script>
 export default {
   data() {
-    let base = "../../PHP/public/index.php/index/index/index.html";
     return {
       dateTime: "",
       menuList: [
@@ -114,7 +102,7 @@ export default {
       color: #fff;
     }
     li.zcgl {
-      background: url("~@/assets/5.png") no-repeat;
+      background: url("~@/assets/8.png") no-repeat;
     }
     li.sjksh {
       background: url("~@/assets/5.png") no-repeat;
