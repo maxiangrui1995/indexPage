@@ -1,30 +1,30 @@
 <template>
-    <div class="wrapper">
-        <div class="title">自动修复</div>
-        <div class="box">
-            <div class="view">
-                <canvas ref="view" width="160" height="160"></canvas>
-                <transition name="num-plus">
-                    <p v-if="show" class="add">+{{1}}</p>
-                </transition>
-                <div class="total">{{total}}</div>
-            </div>
-            <div class="info">
-                <div class="item header">
-                    <div>自动修复率</div>
-                    <div class="num">{{auto_radio}}%</div>
-                </div>
-                <div class="item">
-                    <div>自动修复</div>
-                    <div class="num">{{automatic}}个</div>
-                </div>
-                <div class="item">
-                    <div>人工修复</div>
-                    <div class="num">{{artificial}}个</div>
-                </div>
-            </div>
+  <div class="wrapper">
+    <div class="title">自动修复</div>
+    <div class="box">
+      <div class="view">
+        <canvas ref="view" width="160" height="160"></canvas>
+        <transition name="num-plus">
+          <p v-if="show" class="add">+{{1}}</p>
+        </transition>
+        <div class="total">{{total}}</div>
+      </div>
+      <div class="info">
+        <div class="item header">
+          <div>自动修复率</div>
+          <div class="num">{{auto_radio}}%</div>
         </div>
+        <div class="item">
+          <div>自动修复</div>
+          <div class="num">{{automatic}}个</div>
+        </div>
+        <div class="item">
+          <div>人工修复</div>
+          <div class="num">{{artificial}}个</div>
+        </div>
+      </div>
     </div>
+  </div>
 </template>
 
 <script>
@@ -138,7 +138,8 @@ export default {
         originNum += step;
         if (
           (step > 0 && originNum >= finalNum) ||
-          (step < 0 && originNum <= finalNum)
+          (step < 0 && originNum <= finalNum) ||
+          step == 0
         ) {
           originNum = finalNum;
           clearInterval(timer);

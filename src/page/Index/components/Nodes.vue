@@ -14,7 +14,7 @@
           <div class="box-body-inner-item-left"></div>
           <div class="box-body-inner-item-right">
             <div class="num">{{online}}</div>
-            <div>总节点(个)</div>
+            <div>运行节点(个)</div>
           </div>
         </i-col>
       </Row>

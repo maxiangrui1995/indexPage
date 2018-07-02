@@ -4,7 +4,7 @@ import iView from "iview";
 import store from "./store";
 import promise from 'es6-promise';
 import './api';
-// import "./mock";
+import "./mock";
 
 import "iview/dist/styles/iview.css";
 import "vue2-scrollbar/dist/style/vue2-scrollbar.css";

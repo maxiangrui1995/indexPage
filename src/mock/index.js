@@ -50,7 +50,7 @@ Mock.mock("/api/Ma_zong/countAssets", /post|get/i, { data: count_assets, status:
 
 // 中心控制消息
 const control_center = () => {
-	if (Random.boolean(1, 2, true)) {
+	/* if (Random.boolean(1, 2, true)) {
 		return Mock.mock({
 			"data": [{
 				"id|+1": 0,
@@ -64,7 +64,18 @@ const control_center = () => {
 		}).data;
 	} else {
 		return [];
-	}
+	} */
+	return Mock.mock({
+		"data": [{
+			"id|+1": 0,
+			"message_type":"2",
+			"fault_type|1": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 50, 52, 54, 100, 102, 104, 106, 108, 110, 112, 114],
+			"memo": "@csentence(5, 10)",
+			"level": "@integer(0, 5)",
+			"crossing_name": "@csentence(5, 10)",
+			"create_time": "@datetime"
+		}]
+	}).data;
 }
 Mock.mock("/api/Ma_zong/controlCenter", /post|get/i, { data: control_center, status: "1" });
 
