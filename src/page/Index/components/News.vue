@@ -302,7 +302,10 @@ export default {
     }
   },
   created() {
-    this.loopFetchData();
+    let reg = new RegExp("(^| )znyw_token=([^;]*)(;|$)");
+    if (document.cookie.match(reg)) {
+      this.loopFetchData();
+    }
   }
 };
 </script>

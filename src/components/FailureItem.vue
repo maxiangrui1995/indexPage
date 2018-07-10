@@ -1,9 +1,9 @@
 <template>
   <div class="wrapper">
     <div class="body">
-      <div class="img">
-        <img :src="'../../PHP/public'+data.fault_img_url" alt="路口图片">
-      </div>
+      <!-- <div class="img">
+        <img :src="'../../PHP/public'+data.fault_img_url" :onerror="defaultImg" alt="路口图片">
+      </div> -->
       <div class="info">
         <div class="item">
           {{data.crossing_name}}
@@ -38,7 +38,8 @@ export default {
         "0": "未派发",
         "1": "已手动派发",
         "2": "已自动派发"
-      }
+      },
+      defaultImg: 'this.src="' + require("../assets/imgerror.png") + '"'
     };
   },
   created() {},
@@ -104,6 +105,7 @@ export default {
     color: #898c96;
     font-size: 1.08em;
     margin-top: 10px;
+    text-indent: 10px;
     span {
       color: #ffffff;
     }

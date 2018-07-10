@@ -10,14 +10,16 @@
           </div>
         </div>
         <div class="table-body">
-          <transition-group name="list" tag="div">
-            <div v-for="(item) in items" v-bind:key="item.category_num" class="list-item">
-              <div :class="'bg'+item.category_num" class="tr">
-                <div class="td">{{item.name}}</div>
-                <div class="td">{{item.count}}</div>
+          <div v-if="items.length>0">
+            <transition-group name="list" tag="div">
+              <div v-for="(item) in items" v-bind:key="item.category_num" class="list-item">
+                <div :class="'bg'+item.category_num" class="tr">
+                  <div class="td">{{item.name}}</div>
+                  <div class="td">{{item.count}}</div>
+                </div>
               </div>
-            </div>
-          </transition-group>
+            </transition-group>
+          </div>
         </div>
       </div>
     </div>
@@ -37,9 +39,11 @@ export default {
   methods: {},
   created() {
     setInterval(() => {
-      let d = this.items[0];
-      this.items.splice(0, 1);
-      this.items.push(d);
+      if (this.items.length > 0) {
+        let d = this.items[0];
+        this.items.splice(0, 1);
+        this.items.push(d);
+      }
     }, 5000);
   },
   watch: {
@@ -47,6 +51,8 @@ export default {
       if (this.items.length) {
         data.forEach(item => {
           this.items.forEach(item2 => {
+            item2.category_num = item2.category_num || {};
+            item.category_num = item.category_num || {};
             if (item2.category_num == item.category_num) {
               item2.count = item.count;
             }

@@ -2,7 +2,7 @@
   <div class="box">
     <p class="box-info hightlight">视频通道</p>
     <div class="selectbox" style="z-index:2;" v-if="videoData.length>0">
-      <Dropdown @on-click="dropDownItemSelect" placement="right-start">
+      <Dropdown class="column-dropdown" @on-click="dropDownItemSelect" placement="right-start">
         <a href="javascript:void(0)">
           {{videoDataSelected.dev_name}}
           <Icon type="arrow-down-b"></Icon>
@@ -165,5 +165,19 @@ export default {
       }
     }
   }
+}
+</style>
+
+<style>
+.ivu-select-dropdown {
+  background-color: #0b2864;
+  margin-left: 5px;
+}
+
+.column-dropdown .ivu-dropdown-item {
+  color: #fff;
+}
+.column-dropdown .ivu-dropdown-item:hover {
+  background: #143579;
 }
 </style>

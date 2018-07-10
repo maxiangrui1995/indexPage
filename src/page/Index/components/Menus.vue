@@ -18,16 +18,23 @@ export default {
       menuList: [
         {
           name: "资产管理",
-          class: "zcgl"
+          class: "zcgl",
+          title: "资产管理"
         },
         {
           name: "数据可视化",
-          class: "sjksh"
+          class: "sjksh",
+          title: "数据可视化"
         },
-        { name: "诊断", class: "zd" },
+        {
+          name: "诊断",
+          class: "zd",
+          title: "综合诊断"
+        },
         {
           name: "统计分析",
-          class: "tjfx"
+          class: "tjfx",
+          title: "统计分析"
         }
       ]
     };
@@ -53,9 +60,8 @@ export default {
       }, 1000);
     },
     linkTo(data) {
-      sessionStorage.setItem("jk_url", data.name);
-      window.location.href =
-        "../../PHP/public/index.php/index/index/index.html";
+      sessionStorage.setItem("jk_url", data.title);
+      window.location.href = indexURL;
     }
   },
   created() {

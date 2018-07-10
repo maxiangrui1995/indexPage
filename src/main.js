@@ -16,8 +16,8 @@ Vue.config.productionTip = false;
 Vue.use(iView);
 
 new Vue({
-  el: "#app",
-  store,
-  components: { App },
-  template: "<App/>"
+    el: "#app",
+    store,
+    components: { App },
+    template: "<App/>"
 });

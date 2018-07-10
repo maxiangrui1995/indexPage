@@ -68,7 +68,7 @@ const control_center = () => {
 	return Mock.mock({
 		"data": [{
 			"id|+1": 0,
-			"message_type":"2",
+			"message_type":"1",
 			"fault_type|1": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 50, 52, 54, 100, 102, 104, 106, 108, 110, 112, 114],
 			"memo": "@csentence(5, 10)",
 			"level": "@integer(0, 5)",

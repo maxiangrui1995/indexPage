@@ -100,45 +100,12 @@ export default {
     };
   },
   methods: {
-    loadData() {
-      this.$http
-        .post("Ma_zong/indexAllData", { tag: "njdh" })
-        .then(res => {
-          let data = res.data.data;
-          if (data) {
-            // 在线率
-            this.online_radio = data.online_radio;
-            // 节点数
-            this.node_number = data.node_number;
-            // 设备
-            this.count_assets = data.count_assets;
-            // 组织机构
-            this.organize_show = data.organize_show;
-            // 第一个组织机构下的机箱数据
-            this.crossing_box = data.crossing_box;
-            // 视频
-            this.play_video = data.play_video[0] || {};
-            // 自动修复
-            this.fault_repair = data.fault_repair;
-            // 中心控制数据
-            this.control_center = data.control_center;
-            // 故障原因
-            this.current_fault = data.current_fault;
-
-            this.$store.commit("setLogin", true);
-            this.$store.commit("setOriganizeShow", data.organize_show[0]);
-          }
-        })
-        .catch(res => {
-          this.$Notice.error({
-            desc: res.response.data
-          });
-        });
-    },
     // 请求数据
     fetchAllData() {
       this.$http("Ma_zong/indexAllData").then(res => {
-        if (!res.status) return;
+        if (!res.status) {
+          return;
+        }
         let data = res.data;
         // console.log(data);
         // 节点数
@@ -201,8 +168,18 @@ export default {
     }
   },
   created() {
-    this.fetchAllData();
-    this.realtimeFetchData();
+    // 检测是否登录
+    let reg = new RegExp("(^| )znyw_token=([^;]*)(;|$)");
+    if (!document.cookie.match(reg)) {
+      if (process.env.NODE_ENV === "production") {
+        window.location.href = loginURL;
+      } else {
+        this.$Message.error("未登录!!");
+      }
+    } else {
+      this.fetchAllData();
+      this.realtimeFetchData();
+    }
     // this.transition();
   }
 };

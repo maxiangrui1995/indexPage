@@ -4,7 +4,7 @@ import axios from "axios";
 // 环境默认指向开发环境
 const env = process.env.NODE_ENV || "development";
 if (env === 'production') {
-    axios.defaults.baseURL = "../../PHP/public/index.php/index";
+    axios.defaults.baseURL = "../";
 } else {
     axios.defaults.baseURL = "/api/";
 }
@@ -18,7 +18,7 @@ const $http = (url, params) => {
         axios({
             method: "post",
             url: url,
-            data: Object.assign(params || {}, { tag: "njdh" })
+            data: Object.assign(params || {})
         }).then(res => {
             reslove(res.data);
         }).catch(error => {

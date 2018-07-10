@@ -199,8 +199,8 @@ export default {
 }
 </style>
 <style>
-.ivu-spin {
-  background: rgba(6, 27, 68, 0.3);
+.ivu-spin-fix {
+  background-color: rgba(42, 68, 119, 0.3) !important;
 }
 .demo-page .ivu-page-next,
 .demo-page .ivu-page-prev {
